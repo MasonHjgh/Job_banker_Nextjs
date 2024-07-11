@@ -1,10 +1,17 @@
 import React from "react";
 import Link from "next/link";
 
-const NavBarItem = (props) => {
+type ItemProps = {
+  item: {
+    address: string;
+    text: string;
+  };
+};
+
+const NavBarItem: React.FC<ItemProps> = ({ item }) => {
   return (
     <li>
-      <Link href={props.item.address}>{props.item.text}</Link>
+      <Link href={item.address}>{item.text}</Link>
     </li>
   );
 };
