@@ -15,4 +15,8 @@ export const StatusDropdownData = [
         id: 4,
         name: "Rejected",
     },
+    {
+        id: 5,
+        name: "Saved",
+    },
 ]

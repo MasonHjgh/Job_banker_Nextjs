@@ -12,7 +12,7 @@ import axios, { type AxiosRequestConfig } from 'axios'
  * Axios instance config
  */
 
-export const API_BASE_API_URL = "http://localhost:3000/api"
+export const API_BASE_API_URL = "/api"
 
 const axiosInstance = axios.create({
     // these are just basic configs, read axios docs, nothing special.

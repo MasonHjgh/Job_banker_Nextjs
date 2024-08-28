@@ -1,15 +1,10 @@
-import React from "react";
+import React from "react"
 
-import JobTable from "components/JobTable";
-type Props = {};
+import JobTable from "components/JobTable"
+type Props = {}
 
 function Dashboard({}: Props) {
-  return (
-    <>
-
-      <JobTable />
-    </>
-  );
+  return <JobTable />
 }
 
-export default Dashboard;
+export default Dashboard

@@ -1,19 +1,19 @@
-import React from "react";
-import Link from "next/link";
+import React from "react"
+import Link from "next/link"
 
-type ItemProps = {
+type Props = {
   item: {
-    address: string;
-    text: string;
-  };
-};
+    address: string
+    text: string
+  }
+}
 
-const NavBarItem: React.FC<ItemProps> = ({ item }) => {
+function NavBarItem({ item }: Props) {
   return (
     <li>
       <Link href={item.address}>{item.text}</Link>
     </li>
-  );
-};
+  )
+}
 
-export default NavBarItem;
+export default NavBarItem

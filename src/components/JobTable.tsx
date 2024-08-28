@@ -1,8 +1,12 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import tableData from "../Resources/TableDummyData";
-import Link from "next/link";
-import { ClientApiRequestError, request } from "services/api";
+"use client"
+
+import React, { useEffect, useState } from "react"
+import tableData from "../Resources/TableDummyData"
+import Link from "next/link"
+import { ClientApiRequestError, request } from "services/api"
+import { ReactHookFormEdit } from "services/ReactHookFormEdit"
+import { ReactHookFormAdd } from "services/ReactHookFormAdd"
+import { StatusDropdownData } from "Resources/DropDownsData"
 
 const tableTitles = [
   "Select",
@@ -16,82 +20,171 @@ const tableTitles = [
   "Interview Date",
   "Resume Link",
   "Cover Letter",
-];
+]
 
-// two ways to do it here. First is to create a "Record<string, any>" which is trashy but works.>
-// the other is to type each property of the object. which is how you should always do.
-type JobsResponseType = {
-  id: string;
-  company_name: string;
-  position_name: string;
-  salary: string;
-  job_link: string;
-  job_description: string;
-  contact: string;
-  status: number;
-  application_date: string | null;
-  interview_date: string | null;
-  resume_link: string;
-  cover_letter_link: string;
-  saved_date: string | null;
-};
+export type JobsResponseType = {
+  id: string
+  company_name: string
+  position_name: string
+  salary: string
+  job_link: string
+  job_description: string
+  contact: string
+  status: number
+  application_date: string
+  interview_date: string
+  resume_link: string
+  cover_letter_link: string
+  saved_date: string | null
+}
 
 const JobTable = () => {
-  const [data, setData] = useState<JobsResponseType[]>([]);
+  const [data, setData] = useState<JobsResponseType[]>([])
 
   //selected item handler
-  const [selectedItem, setSelectedItem] = useState<
-    JobsResponseType | undefined
-  >(undefined);
-  const handleSelectedItem = (item: JobsResponseType) => {
-    setSelectedItem(item);
-  };
+  const [selectedItem, setSelectedItem] = useState<JobsResponseType | null>(
+    null
+  )
+  const [isAddingItem, setIsAddingItem] = useState(false)
+  const [newItem, setNewItem] = useState<JobsResponseType | null>(null)
 
-  //load data on the start of the page
-  const fetchData = async () => {
+  const fetchData = async (signal?: AbortSignal) => {
     try {
       const newdata = await request<JobsResponseType[]>({
         url: "/jobs",
-      });
-      setData(newdata.data);
+        signal: signal,
+      })
+      setData(newdata.data)
     } catch (error) {
-      // Can't type it directly in the trycatch
-      // will do it inline
-      // console.log((error as ClientApiRequestError).type);
-      // our own custom error with custom properties with nice little messages.
+      console.log(error)
     }
+  }
 
-    // now about the custom error object we had, you can handle it like this:
-  };
-
-  const editItem1 = async () => {
+  const editJob = async () => {
     try {
       const result = await request<JobsResponseType>({
         url: "/jobs",
         method: "PUT",
         data: selectedItem,
-      });
-      console.log(result);
-    } catch (error) {}
-  };
+      })
+      setSelectedItem(null)
+
+      // TODO: You don't need to fetch the whole data again. Just update your local "data" state if the edit request is successful.
+      fetchData()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const addJob = async () => {
+    try {
+      const result = await request<JobsResponseType>({
+        url: "/jobs",
+        method: "POST",
+        data: newItem,
+      })
+      setNewItem(null)
+      setIsAddingItem(false)
+
+      // TODO: You don't need to fetch the whole data again. Just update your local "data" state if the add request is successful.
+      fetchData()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const deleteJob = async () => {
+    try {
+      const result = await request<JobsResponseType>({
+        url: `/jobs`,
+        method: "DELETE",
+        data: selectedItem,
+      })
+      setSelectedItem(null)
+
+      // TODO: You don't need to fetch the whole data again. Just update your local "data" state if the delete request is successful.
+      fetchData()
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    const abortController = new AbortController()
 
+    fetchData(abortController.signal)
+
+    return () => {
+      abortController.abort()
+    }
+  }, [])
+
+  const onFieldUpdate = (field: keyof JobsResponseType, value: any) => {
+    setSelectedItem((prevState) => {
+      if (prevState === null) {
+        return null
+      }
+      return { ...prevState, [field]: value }
+    })
+  }
+
+  const newItemFieldUpdate = (
+    field: keyof Partial<JobsResponseType>,
+    value: any
+  ) => {
+    setNewItem((prevState: any) => {
+      return { ...prevState, [field]: value }
+    })
+  }
   return (
     <div className="overflow-x-auto">
       <div className="join">
         <div>
-          <button className="btn join-item">Add</button>
+          {isAddingItem === false ? (
+            <button
+              className="btn join-item"
+              onClick={() => setIsAddingItem(true)}
+            >
+              Add
+            </button>
+          ) : (
+            <button className="btn join-item" onClick={addJob}>
+              Save
+            </button>
+          )}
+        </div>
+
+        {isAddingItem ? (
+          <div>
+            <button
+              className="btn join-item"
+              onClick={() => setIsAddingItem(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        ) : null}
+
+        <div>
+          <button
+            className="btn join-item"
+            onClick={editJob}
+            disabled={!selectedItem}
+          >
+            Edit
+          </button>
         </div>
 
         <div>
-          {/* <button className="btn join-item" onClick={editItem}>Edit</button> */}
+          <button
+            className="btn join-item"
+            onClick={deleteJob}
+            disabled={!selectedItem}
+          >
+            Delete
+          </button>
         </div>
-        <div>
-          <button className="btn join-item">Delete</button>
-        </div>
+
         <div>
           <button className="btn join-item">Search</button>
         </div>
@@ -106,37 +199,41 @@ const JobTable = () => {
             ))}
           </tr>
         </thead>
+
         <tbody>
+          {isAddingItem ? (
+            <tr>
+              <th></th>
+              <th></th>
+              <ReactHookFormAdd onFieldChange={newItemFieldUpdate} />
+            </tr>
+          ) : null}
+
           {data.map((row, index) => (
             <tr key={index}>
               <th>{index + 1}</th>
+
               <td>
                 <input
                   type="radio"
                   className="radio"
                   value={row.id}
                   id={"select" + (index + 1).toString()}
-                  onChange={() => handleSelectedItem(row)}
+                  onChange={() => setSelectedItem(row)}
                   checked={selectedItem?.id === row.id}
+                  onClick={() => {
+                    selectedItem?.id === row.id
+                      ? setSelectedItem(null)
+                      : setSelectedItem(row)
+                  }}
                 />
               </td>
+              
               {selectedItem && selectedItem.id === row.id ? (
-                <>
-                  <td>
-                    <input type="text" value={row.position_name} className="input input-bordered w-full"/>
-                  </td>
-                  <td>{row.company_name}</td>
-                  <td>${row.salary}</td>
-                  <td>
-                    <Link href={row.job_link}>link</Link>
-                  </td>
-                  <td>{row.application_date}</td>
-                  <td>{row.contact}</td>
-                  <td>{row.status}</td>
-                  <td>{row.interview_date}</td>
-                  <td>{row.resume_link}</td>
-                  <td>{row.cover_letter_link}</td>
-                </>
+                <ReactHookFormEdit
+                  item={selectedItem}
+                  onFieldUpdate={onFieldUpdate}
+                />
               ) : (
                 <>
                   <td>{row.position_name}</td>
@@ -147,7 +244,10 @@ const JobTable = () => {
                   </td>
                   <td>{row.application_date}</td>
                   <td>{row.contact}</td>
-                  <td>{row.status}</td>
+                  <td>
+                    {StatusDropdownData.find((item) => item.id === row.status)
+                      ?.name || "Unknown Status"}
+                  </td>
                   <td>{row.interview_date}</td>
                   <td>{row.resume_link}</td>
                   <td>{row.cover_letter_link}</td>
@@ -158,7 +258,7 @@ const JobTable = () => {
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}
 
-export default JobTable;
+export default JobTable
