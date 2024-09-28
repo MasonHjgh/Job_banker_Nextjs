@@ -1,8 +1,13 @@
 import React from "react"
-
+import { signIn } from "../../auth"
 const Login = () => {
   return (
-    
+    <form
+    action={async () => {
+      "use server"
+      await signIn("google",{ redirectTo: "/dashboard" })
+    }}
+  >
       <div
         className="card w-96 bg-base-100 shadow-xl col-span-1"
       >
@@ -24,6 +29,7 @@ const Login = () => {
           <button className="btn btn-primary">Primary</button>
         </div>
       </div>
+      </form>
     
   )
 }

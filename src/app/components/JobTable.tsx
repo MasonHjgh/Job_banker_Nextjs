@@ -1,12 +1,13 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import tableData from "../Resources/TableDummyData"
+import tableData from "../../Resources/TableDummyData"
 import Link from "next/link"
-import { ClientApiRequestError, request } from "services/api"
-import { ReactHookFormEdit } from "services/ReactHookFormEdit"
-import { ReactHookFormAdd } from "services/ReactHookFormAdd"
+import { ClientApiRequestError, request } from "app/services/api"
+import { ReactHookFormEdit } from "app/services/ReactHookFormEdit"
+import { ReactHookFormAdd } from "app/services/ReactHookFormAdd"
 import { StatusDropdownData } from "Resources/DropDownsData"
+
 
 const tableTitles = [
   "Select",
@@ -139,6 +140,7 @@ const JobTable = () => {
   return (
     <div className="overflow-x-auto">
       <div className="join">
+
         <div>
           {isAddingItem === false ? (
             <button

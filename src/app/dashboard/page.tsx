@@ -1,10 +1,13 @@
-import React from "react"
 
-import JobTable from "components/JobTable"
-type Props = {}
+import JobTable from "app/components/JobTable"
 
-function Dashboard({}: Props) {
+
+
+function Dashboard() {
+
   return <JobTable />
 }
 
 export default Dashboard
+
+

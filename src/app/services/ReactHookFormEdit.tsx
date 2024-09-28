@@ -1,20 +1,36 @@
-import type { JobsResponseType } from "components/JobTable";
+import type { JobsResponseType } from "app/components/JobTable";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { StatusDropdownData } from "Resources/DropDownsData";
 
 type Props = {
-  onFieldChange: (field: keyof Partial<JobsResponseType>, value: any) => void;
+  item: JobsResponseType;
+  onFieldUpdate: (field: keyof JobsResponseType, value: any) => void;
 };
-export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
-  const { register } = useForm();
+export const ReactHookFormEdit = ({ item, onFieldUpdate }: Props) => {
+  const { register } = useForm({
+    defaultValues: {
+      position_name: item.position_name,
+      company_name: item.company_name,
+      salary: item.salary,
+      job_link: item.job_link,
+      job_description: item.job_description,
+      contact: item.contact,
+      status: item.status,
+      application_date: item.application_date,
+      interview_date: item.interview_date,
+      resume_link: item.resume_link,
+      cover_letter_link: item.cover_letter_link,
+      saved_date: item.saved_date,
+    },
+  });
 
   return (
     <>
       <td>
         <input
           {...register("position_name", {
-            onChange: (evt) => onFieldChange("position_name", evt.target.value),
+            onChange: (evt) => onFieldUpdate("position_name", evt.target.value),
           })}
           type="text"
           className="input input-bordered w-full"
@@ -23,7 +39,7 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
       <td>
         <input
           {...register("company_name", {
-            onChange: (evt) => onFieldChange("company_name", evt.target.value),
+            onChange: (evt) => onFieldUpdate("company_name", evt.target.value),
           })}
           type="text"
           className="input input-bordered w-full"
@@ -32,7 +48,7 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
       <td>
         <input
           {...register("salary", {
-            onChange: (evt) => onFieldChange("salary", evt.target.value),
+            onChange: (evt) => onFieldUpdate("salary", evt.target.value),
           })}
           type="text"
           className="input input-bordered w-full"
@@ -41,7 +57,7 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
       <td>
         <input
           {...register("job_link", {
-            onChange: (evt) => onFieldChange("job_link", evt.target.value),
+            onChange: (evt) => onFieldUpdate("job_link", evt.target.value),
           })}
           type="text"
           className="input input-bordered w-full"
@@ -51,8 +67,7 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
         {" "}
         <input
           {...register("job_description", {
-            onChange: (evt) =>
-              onFieldChange("job_description", evt.target.value),
+            onChange: (evt) => onFieldUpdate("job_description", evt.target.value),
           })}
           type="text"
           className="input input-bordered w-full"
@@ -62,18 +77,17 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
         <input
           type="text"
           {...register("contact", {
-            onChange: (evt) => onFieldChange("contact", evt.target.value),
+            onChange: (evt) => onFieldUpdate("contact", evt.target.value),
           })}
           className="input input-bordered w-full"
         />
       </td>
       <td>
-        <select
+      <select
           className="select select-bordered w-full max-w-xs"
           {...register("status", {
-            onChange: (evt) => onFieldChange("status", evt.target.value),
+            onChange: (evt) => onFieldUpdate("status", evt.target.value),
           })}
-          defaultValue={5}
         >
           {StatusDropdownData.map((op, index) => (
             <option key={index} value={op.id} >
@@ -86,8 +100,7 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
         <input
           type="text"
           {...register("application_date", {
-            onChange: (evt) =>
-              onFieldChange("application_date", evt.target.value),
+            onChange: (evt) => onFieldUpdate("application_date", evt.target.value),
           })}
           className="input input-bordered w-full"
         />
@@ -96,7 +109,7 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
         <input
           type="text"
           {...register("resume_link", {
-            onChange: (evt) => onFieldChange("resume_link", evt.target.value),
+            onChange: (evt) => onFieldUpdate("resume_link", evt.target.value),
           })}
           className="input input-bordered w-full"
         />
@@ -105,8 +118,7 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
         <input
           type="text"
           {...register("cover_letter_link", {
-            onChange: (evt) =>
-              onFieldChange("cover_letter_link", evt.target.value),
+            onChange: (evt) => onFieldUpdate("cover_letter_link", evt.target.value),
           })}
           className="input input-bordered w-full"
         />

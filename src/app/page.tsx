@@ -7,8 +7,9 @@ import Login from "features/login"
 
 export default function Home() {
   return (
-    <div className="grid grid-cols-3 ">
-      <Login />
+    <div className="grid grid-cols-3 place-items-center">
+      
+      {/* <Login /> */}
     </div>
   )
 }
