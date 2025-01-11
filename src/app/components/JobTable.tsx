@@ -56,7 +56,6 @@ const JobTable = () => {
       })
       
       setData(newdata.data)
-      console.log(newdata)
     } catch (error) {
       console.log(error)
     }
@@ -216,7 +215,7 @@ const JobTable = () => {
             </tr>
           ) : null}
 
-          {data.map((row, index) => (
+          {data?.map((row, index) => (
             <tr key={index}>
               <th>{index + 1}</th>
 
