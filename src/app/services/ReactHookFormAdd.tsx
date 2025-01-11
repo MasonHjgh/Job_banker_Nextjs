@@ -2,9 +2,10 @@ import type { JobsResponseType } from "app/components/JobTable";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { StatusDropdownData } from "Resources/DropDownsData";
+import  type {Job} from "@prisma/client";
 
 type Props = {
-  onFieldChange: (field: keyof Partial<JobsResponseType>, value: any) => void;
+  onFieldChange: (field: keyof Partial<Job>, value: any) => void;
 };
 export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
   const { register } = useForm();

@@ -1,16 +1,14 @@
 import { connectToDB } from "../../../utils/database.js";
 import { NextResponse, NextRequest } from "next/server.js";
-import Job from "../../../models/Job.js";
 
+import { PrismaClient } from "@prisma/client";
 // GET all Jobs
+
+const prisma = new PrismaClient();
 export async function GET() {
   try {
-    const client = await connectToDB();
-    const result = await client.query(
-      "SELECT * FROM Job order by saved_date desc"
-    );
-    const jobs = result.rows;
-    return NextResponse.json(jobs);
+    const results= await prisma.job.findMany();
+    return NextResponse.json(results);
   } catch (error) {
     console.log(error);
     return NextResponse.json(error);
@@ -21,50 +19,26 @@ export async function GET() {
 export async function PUT(request) {
   try {
     const job = await request.json();
-    const client = await connectToDB();
-    const query = `
-  UPDATE Job
-  SET
-    company_name = $1,
-    position_name = $2,
-    salary = $3,
-    job_link = $4,
-    job_description = $5,
-    contact = $6,
-    status = $7,
-    application_date = $8,
-    interview_date = $9,
-    resume_link = $10,
-    cover_letter_link = $11,
-    saved_date = $12
-  WHERE id = $13
-  RETURNING *;
-`;
-
-    const values = [
-      job.company_name,
-      job.position_name,
-      job.salary,
-      job.job_link,
-      job.job_description,
-      job.contact,
-      job.status,
-      job.application_date,
-      job.interview_date,
-      job.resume_link,
-      job.cover_letter_link,
-      job.saved_date,
-      job.id,
-    ];
-
-    const result = await client.query(query, values);
-
-    const jobs = result.rows;
-    if (result.rows.length > 0) {
-      return NextResponse.json(jobs);
-    } else {
-      return NextResponse.json("Job not found");
-    }
+    const updatedJob= await prisma.job.update({
+      where: {
+        id: job.id,
+      },
+      data: {
+        company_name: job.company_name,
+        position_name: job.position_name,
+        salary: job.salary,
+        job_link: job.job_link,
+        job_description: job.job_description,
+        contact: job.contact,
+        status: job.status,
+        application_date: job.application_date,
+        interview_date: job.interview_date,
+        resume_link: job.resume_link,
+        cover_letter_link: job.cover_letter_link,
+      },
+    })
+    console.log(updatedJob);
+    return NextResponse.json(updatedJob);
   } catch (error) {
     console.log(error);
     return NextResponse.json(error);
@@ -72,58 +46,60 @@ export async function PUT(request) {
 }
 
 // Add Job
+// TODO: Fix Date in the front end
+// TODO: Fix Date Applicant Id after auth
 export async function POST(request) {
   try {
-    const job = new Job(await request.json());
-    const client = await connectToDB();
-    const query = `
-            INSERT INTO Job (
-              company_name, position_name, salary, job_link, job_description,
-              contact, status, application_date, interview_date, resume_link,
-              cover_letter_link, saved_date
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) 
-             RETURNING *
-          `;
-    const values = [
-      job.company_name,
-      job.position_name,
-      job.salary,
-      job.job_link,
-      job.job_description,
-      job.contact,
-      job.status,
-      job.application_date,
-      job.interview_date,
-      job.resume_link,
-      job.cover_letter_link,
-      Date.now(),
-    ];
-    const result = await client.query(query, values);
+    // Parse the incoming request body
+    const jobData = await request.json();
+
+    // Use Prisma's create method to insert a new job into the database
+    jobData["applicant_id"]=1;
+    
+
+    const job = await prisma.job.create({
+      data: {
+        company_name: jobData.company_name,
+        position_name: jobData.position_name,
+        salary: jobData.salary,
+        job_link: jobData.job_link,
+        job_description: jobData.job_description || null,  // Optional field, so fallback to null if not provided
+        contact: jobData.contact,
+        status: jobData.status,  // Assuming status is a string, not a number
+        application_date: jobData.application_date ? new Date(jobData.application_date) : null,  // Ensure it's a Date object or null
+        interview_date: jobData.interview_date ? new Date(jobData.interview_date) : null,  // Ensure it's a Date object or null
+        resume_link: jobData.resume_link,
+        cover_letter_link: jobData.cover_letter_link,
+        applicant_id: 1,  // Assuming applicant_id is always 1 for now
+      },
+    });
+    
+
     return NextResponse.json({
-      message: "Job added successfully",
+      message: 'Job added successfully',
       status: 200,
+      job, // Return the created job as part of the response
     });
   } catch (error) {
-    console.log(error);
-    return NextResponse.json(error);
+    console.error(error);
+    return NextResponse.json({
+      message: 'Failed to add job',
+      status: 500,
+      error: error.message,
+    });
   }
 }
 
 // Delete Job
 export async function DELETE(request) {
   try {
-    const job = new Job(await request.json());
-    const client = await connectToDB();
-    const result = await client.query(
-      "delete from Job where id = $1 Returning *",
-      [job.id],
-      (error, results) => {
-        if (error) {
-          return NextResponse.json(error);
-        }
-      }
-    );
-    return NextResponse.json("deleted successfully");
+    const job = await request.json();
+    const deleteJob= await prisma.job.delete({
+      where: {
+        id: job.id,
+      },
+    })
+    return NextResponse.json(deleteJob);
   } catch (error) {
     console.log(error);
     return NextResponse.json(error);

@@ -1,13 +1,12 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import tableData from "../../Resources/TableDummyData"
 import Link from "next/link"
 import { ClientApiRequestError, request } from "app/services/api"
 import { ReactHookFormEdit } from "app/services/ReactHookFormEdit"
 import { ReactHookFormAdd } from "app/services/ReactHookFormAdd"
 import { StatusDropdownData } from "Resources/DropDownsData"
-
+import { type Job } from "@prisma/client";
 
 const tableTitles = [
   "Select",
@@ -31,7 +30,7 @@ export type JobsResponseType = {
   job_link: string
   job_description: string
   contact: string
-  status: number
+  status: string
   application_date: string
   interview_date: string
   resume_link: string
@@ -47,7 +46,7 @@ const JobTable = () => {
     null
   )
   const [isAddingItem, setIsAddingItem] = useState(false)
-  const [newItem, setNewItem] = useState<JobsResponseType | null>(null)
+  const [newItem, setNewItem] = useState<Job | null>(null)
 
   const fetchData = async (signal?: AbortSignal) => {
     try {
@@ -55,7 +54,9 @@ const JobTable = () => {
         url: "/jobs",
         signal: signal,
       })
+      
       setData(newdata.data)
+      console.log(newdata)
     } catch (error) {
       console.log(error)
     }
@@ -79,7 +80,11 @@ const JobTable = () => {
 
   const addJob = async () => {
     try {
-      const result = await request<JobsResponseType>({
+      if (!newItem) return
+      if(!newItem.status){
+        newItem.status = "5"
+      }
+      const result = await request<Job>({
         url: "/jobs",
         method: "POST",
         data: newItem,
@@ -130,7 +135,7 @@ const JobTable = () => {
   }
 
   const newItemFieldUpdate = (
-    field: keyof Partial<JobsResponseType>,
+    field: keyof Partial<Job>,
     value: any
   ) => {
     setNewItem((prevState: any) => {
@@ -247,7 +252,7 @@ const JobTable = () => {
                   <td>{row.application_date}</td>
                   <td>{row.contact}</td>
                   <td>
-                    {StatusDropdownData.find((item) => item.id === row.status)
+                    {StatusDropdownData.find((item) => item.id === Number(row.status))
                       ?.name || "Unknown Status"}
                   </td>
                   <td>{row.interview_date}</td>

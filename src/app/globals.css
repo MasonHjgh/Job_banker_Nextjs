@@ -1,3 +1,57 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.job-table {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #fff;
+    color: darkorchid;
+  }
+  
+  .job-table-thead,
+  .job-table-tbody {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .job-table-thead-tr,
+  .job-table-tbody-tr {
+    display: flex;
+  }
+  
+  .job-table-thead-tr-th,
+  .job-table-tbody-tr-td {
+    flex: 1;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+  }
+  
+  .job-table-thead-tr-th {
+    font-weight: bold;
+    background-color: #f4f4f4;
+  }
+  
+  .job-table-tbody-tr {
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .job-table-tbody-tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .job-table-tbody-tr:nth-child(odd) {
+    background-color: #fff;
+  }
+  
+  .job-table-tbody-tr-td p {
+    margin: 0;
+  }
+  
+  .job-table-tbody-tr:last-child {
+    border-bottom: none;
+  }
+  
