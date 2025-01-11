@@ -204,7 +204,7 @@ const JobTable = () => {
             ))}
           </tr>
         </thead>
-        {data.length > 0 ? (
+       
           <tbody>
             {isAddingItem ? (
               <tr>
@@ -214,7 +214,7 @@ const JobTable = () => {
               </tr>
             ) : null}
 
-            {data?.map((row, index) => (
+            {data.length>0?    data?.map((row, index) => (
               <tr key={index}>
                 <th>{index + 1}</th>
 
@@ -260,17 +260,8 @@ const JobTable = () => {
                   </>
                 )}
               </tr>
-            ))}
+            )):<tr><td>no data</td></tr>}
           </tbody>
-        ) : (
-          <tbody>
-            <tr>
-              <td>
-                <span>no data</span>
-              </td>
-            </tr>
-          </tbody>
-        )}
       </table>
     </div>
   )
