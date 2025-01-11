@@ -7,6 +7,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 export async function GET() {
   try {
+    
     const results= await prisma.job.findMany();
     return NextResponse.json(results);
   } catch (error) {

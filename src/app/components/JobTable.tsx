@@ -6,7 +6,7 @@ import { ClientApiRequestError, request } from "app/services/api"
 import { ReactHookFormEdit } from "app/services/ReactHookFormEdit"
 import { ReactHookFormAdd } from "app/services/ReactHookFormAdd"
 import { StatusDropdownData } from "Resources/DropDownsData"
-import { type Job } from "@prisma/client";
+import { type Job } from "@prisma/client"
 
 const tableTitles = [
   "Select",
@@ -50,11 +50,13 @@ const JobTable = () => {
 
   const fetchData = async (signal?: AbortSignal) => {
     try {
+     
       const newdata = await request<JobsResponseType[]>({
         url: "/jobs",
+        method: "GET",
         signal: signal,
       })
-      
+
       setData(newdata.data)
     } catch (error) {
       console.log(error)
@@ -80,7 +82,7 @@ const JobTable = () => {
   const addJob = async () => {
     try {
       if (!newItem) return
-      if(!newItem.status){
+      if (!newItem.status) {
         newItem.status = "5"
       }
       const result = await request<Job>({
@@ -116,8 +118,9 @@ const JobTable = () => {
 
   useEffect(() => {
     const abortController = new AbortController()
-
+   
     fetchData(abortController.signal)
+    fetchData()
 
     return () => {
       abortController.abort()
@@ -133,10 +136,7 @@ const JobTable = () => {
     })
   }
 
-  const newItemFieldUpdate = (
-    field: keyof Partial<Job>,
-    value: any
-  ) => {
+  const newItemFieldUpdate = (field: keyof Partial<Job>, value: any) => {
     setNewItem((prevState: any) => {
       return { ...prevState, [field]: value }
     })
@@ -144,7 +144,6 @@ const JobTable = () => {
   return (
     <div className="overflow-x-auto">
       <div className="join">
-
         <div>
           {isAddingItem === false ? (
             <button
@@ -205,63 +204,73 @@ const JobTable = () => {
             ))}
           </tr>
         </thead>
+        {data.length > 0 ? (
+          <tbody>
+            {isAddingItem ? (
+              <tr>
+                <th></th>
+                <th></th>
+                <ReactHookFormAdd onFieldChange={newItemFieldUpdate} />
+              </tr>
+            ) : null}
 
-        <tbody>
-          {isAddingItem ? (
+            {data?.map((row, index) => (
+              <tr key={index}>
+                <th>{index + 1}</th>
+
+                <td>
+                  <input
+                    type="radio"
+                    className="radio"
+                    value={row.id}
+                    id={"select" + (index + 1).toString()}
+                    onChange={() => setSelectedItem(row)}
+                    checked={selectedItem?.id === row.id}
+                    onClick={() => {
+                      selectedItem?.id === row.id
+                        ? setSelectedItem(null)
+                        : setSelectedItem(row)
+                    }}
+                  />
+                </td>
+
+                {selectedItem && selectedItem.id === row.id ? (
+                  <ReactHookFormEdit
+                    item={selectedItem}
+                    onFieldUpdate={onFieldUpdate}
+                  />
+                ) : (
+                  <>
+                    <td>{row.position_name}</td>
+                    <td>{row.company_name}</td>
+                    <td>${row.salary}</td>
+                    <td>
+                      <Link href={row.job_link}>link</Link>
+                    </td>
+                    <td>{row.application_date}</td>
+                    <td>{row.contact}</td>
+                    <td>
+                      {StatusDropdownData.find(
+                        (item) => item.id === Number(row.status)
+                      )?.name || "Unknown Status"}
+                    </td>
+                    <td>{row.interview_date}</td>
+                    <td>{row.resume_link}</td>
+                    <td>{row.cover_letter_link}</td>
+                  </>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        ) : (
+          <tbody>
             <tr>
-              <th></th>
-              <th></th>
-              <ReactHookFormAdd onFieldChange={newItemFieldUpdate} />
-            </tr>
-          ) : null}
-
-          {data?.map((row, index) => (
-            <tr key={index}>
-              <th>{index + 1}</th>
-
               <td>
-                <input
-                  type="radio"
-                  className="radio"
-                  value={row.id}
-                  id={"select" + (index + 1).toString()}
-                  onChange={() => setSelectedItem(row)}
-                  checked={selectedItem?.id === row.id}
-                  onClick={() => {
-                    selectedItem?.id === row.id
-                      ? setSelectedItem(null)
-                      : setSelectedItem(row)
-                  }}
-                />
+                <span>no data</span>
               </td>
-              
-              {selectedItem && selectedItem.id === row.id ? (
-                <ReactHookFormEdit
-                  item={selectedItem}
-                  onFieldUpdate={onFieldUpdate}
-                />
-              ) : (
-                <>
-                  <td>{row.position_name}</td>
-                  <td>{row.company_name}</td>
-                  <td>${row.salary}</td>
-                  <td>
-                    <Link href={row.job_link}>link</Link>
-                  </td>
-                  <td>{row.application_date}</td>
-                  <td>{row.contact}</td>
-                  <td>
-                    {StatusDropdownData.find((item) => item.id === Number(row.status))
-                      ?.name || "Unknown Status"}
-                  </td>
-                  <td>{row.interview_date}</td>
-                  <td>{row.resume_link}</td>
-                  <td>{row.cover_letter_link}</td>
-                </>
-              )}
             </tr>
-          ))}
-        </tbody>
+          </tbody>
+        )}
       </table>
     </div>
   )
