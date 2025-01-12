@@ -260,7 +260,7 @@ const JobTable = () => {
                   </>
                 )}
               </tr>
-            )):<tr><td>no data</td></tr>}
+            )):<tr><td>data is empty</td></tr>}
           </tbody>
       </table>
     </div>
