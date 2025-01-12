@@ -2,10 +2,11 @@ import type { JobsResponseType } from "app/components/JobTable";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { StatusDropdownData } from "Resources/DropDownsData";
+import type { Job } from "@prisma/client";
 
 type Props = {
-  item: JobsResponseType;
-  onFieldUpdate: (field: keyof JobsResponseType, value: any) => void;
+  item: Job;
+  onFieldUpdate: (field: keyof Job, value: any) => void;
 };
 export const ReactHookFormEdit = ({ item, onFieldUpdate }: Props) => {
   const { register } = useForm({
@@ -21,7 +22,7 @@ export const ReactHookFormEdit = ({ item, onFieldUpdate }: Props) => {
       interview_date: item.interview_date,
       resume_link: item.resume_link,
       cover_letter_link: item.cover_letter_link,
-      saved_date: item.saved_date,
+      createdAt: item.createdAt,
     },
   });
 
@@ -66,10 +67,10 @@ export const ReactHookFormEdit = ({ item, onFieldUpdate }: Props) => {
       <td>
         {" "}
         <input
-          {...register("job_description", {
-            onChange: (evt) => onFieldUpdate("job_description", evt.target.value),
+          {...register("application_date", {
+            onChange: (evt) => onFieldUpdate("application_date", evt.target.value),
           })}
-          type="text"
+          type="date"
           className="input input-bordered w-full"
         />
       </td>
@@ -98,9 +99,9 @@ export const ReactHookFormEdit = ({ item, onFieldUpdate }: Props) => {
       </td>
       <td>
         <input
-          type="text"
-          {...register("application_date", {
-            onChange: (evt) => onFieldUpdate("application_date", evt.target.value),
+          type="date"
+          {...register("interview_date", {
+            onChange: (evt) => onFieldUpdate("interview_date", evt.target.value),
           })}
           className="input input-bordered w-full"
         />

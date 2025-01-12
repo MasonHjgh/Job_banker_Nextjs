@@ -31,31 +31,29 @@ export type JobsResponseType = {
   job_description: string
   contact: string
   status: string
-  application_date: string
-  interview_date: string
+  application_date: Date | null
+  interview_date: Date | null
   resume_link: string
   cover_letter_link: string
-  saved_date: string | null
+  saved_date: Date | null
 }
 
 const JobTable = () => {
-  const [data, setData] = useState<JobsResponseType[]>([])
+  const [data, setData] = useState<Job[]>([])
 
   //selected item handler
-  const [selectedItem, setSelectedItem] = useState<JobsResponseType | null>(
-    null
-  )
+  const [selectedItem, setSelectedItem] = useState<Job | null>(null)
   const [isAddingItem, setIsAddingItem] = useState(false)
   const [newItem, setNewItem] = useState<Job | null>(null)
 
   const fetchData = async (signal?: AbortSignal) => {
     try {
-     
-      const newdata = await request<JobsResponseType[]>({
+      const newdata = await request<Job[]>({
         url: "/jobs",
         method: "GET",
         signal: signal,
       })
+      console.log(newdata)
 
       setData(newdata.data)
     } catch (error) {
@@ -65,13 +63,12 @@ const JobTable = () => {
 
   const editJob = async () => {
     try {
-      const result = await request<JobsResponseType>({
+      const result = await request<Job>({
         url: "/jobs",
         method: "PUT",
         data: selectedItem,
       })
       setSelectedItem(null)
-
       // TODO: You don't need to fetch the whole data again. Just update your local "data" state if the edit request is successful.
       fetchData()
     } catch (error) {
@@ -81,6 +78,7 @@ const JobTable = () => {
 
   const addJob = async () => {
     try {
+      console.log(newItem)
       if (!newItem) return
       if (!newItem.status) {
         newItem.status = "5"
@@ -102,7 +100,7 @@ const JobTable = () => {
 
   const deleteJob = async () => {
     try {
-      const result = await request<JobsResponseType>({
+      const result = await request<Job>({
         url: `/jobs`,
         method: "DELETE",
         data: selectedItem,
@@ -118,7 +116,7 @@ const JobTable = () => {
 
   useEffect(() => {
     const abortController = new AbortController()
-   
+
     fetchData(abortController.signal)
     fetchData()
 
@@ -127,7 +125,7 @@ const JobTable = () => {
     }
   }, [])
 
-  const onFieldUpdate = (field: keyof JobsResponseType, value: any) => {
+  const onFieldUpdate = (field: keyof Job, value: any) => {
     setSelectedItem((prevState) => {
       if (prevState === null) {
         return null
@@ -140,6 +138,16 @@ const JobTable = () => {
     setNewItem((prevState: any) => {
       return { ...prevState, [field]: value }
     })
+  }
+
+  const parseDateTime =(obj: String | Date | null)=>{
+    if(typeof obj === "string"){
+      return new Date(obj).toLocaleDateString();
+    }
+    if(obj instanceof Date){ 
+      return obj.toLocaleDateString();
+    }
+    return "";
   }
   return (
     <div className="overflow-x-auto">
@@ -204,17 +212,18 @@ const JobTable = () => {
             ))}
           </tr>
         </thead>
-       
-          <tbody>
-            {isAddingItem ? (
-              <tr>
-                <th></th>
-                <th></th>
-                <ReactHookFormAdd onFieldChange={newItemFieldUpdate} />
-              </tr>
-            ) : null}
 
-            {data.length>0?    data?.map((row, index) => (
+        <tbody>
+          {isAddingItem ? (
+            <tr>
+              <th></th>
+              <th></th>
+              <ReactHookFormAdd onFieldChange={newItemFieldUpdate} />
+            </tr>
+          ) : null}
+
+          {data.length > 0 ? (
+            data?.map((row, index) => (
               <tr key={index}>
                 <th>{index + 1}</th>
 
@@ -244,24 +253,33 @@ const JobTable = () => {
                     <td>{row.position_name}</td>
                     <td>{row.company_name}</td>
                     <td>${row.salary}</td>
-                    <td>
+                    {/* <td>
+                      
                       <Link href={row.job_link}>link</Link>
+                    </td> */}
+                    <td>
+                      {row.job_link && <Link href={row.job_link}>link</Link>}
                     </td>
-                    <td>{row.application_date}</td>
+                    <td>{parseDateTime(row.application_date)}</td>
                     <td>{row.contact}</td>
                     <td>
                       {StatusDropdownData.find(
                         (item) => item.id === Number(row.status)
                       )?.name || "Unknown Status"}
                     </td>
-                    <td>{row.interview_date}</td>
+                    <td> {parseDateTime(row.interview_date)}</td>
                     <td>{row.resume_link}</td>
                     <td>{row.cover_letter_link}</td>
                   </>
                 )}
               </tr>
-            )):<tr><td>data is empty</td></tr>}
-          </tbody>
+            ))
+          ) : (
+            <tr>
+              <td>data is empty</td>
+            </tr>
+          )}
+        </tbody>
       </table>
     </div>
   )

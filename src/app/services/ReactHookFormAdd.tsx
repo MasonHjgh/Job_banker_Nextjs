@@ -51,11 +51,11 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
       <td>
         {" "}
         <input
-          {...register("job_description", {
+          {...register("application_date", {
             onChange: (evt) =>
-              onFieldChange("job_description", evt.target.value),
+              onFieldChange("application_date", evt.target.value),
           })}
-          type="text"
+          type="date"
           className="input input-bordered w-full"
         />
       </td>
@@ -85,10 +85,10 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
       </td>
       <td>
         <input
-          type="text"
-          {...register("application_date", {
+          type="date"
+          {...register("interview_date", {
             onChange: (evt) =>
-              onFieldChange("application_date", evt.target.value),
+              onFieldChange("interview_date", evt.target.value),
           })}
           className="input input-bordered w-full"
         />
