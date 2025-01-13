@@ -1,4 +1,4 @@
-import type { JobsResponseType } from "app/components/JobTable";
+
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { StatusDropdownData } from "Resources/DropDownsData";

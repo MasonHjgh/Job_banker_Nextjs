@@ -1,5 +1,5 @@
 
-import JobTable from "app/components/JobTable"
+import JobTable from "features/job-table/JobTable"
 
 
 

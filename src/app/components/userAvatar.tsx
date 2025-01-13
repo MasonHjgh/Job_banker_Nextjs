@@ -8,7 +8,7 @@ export default async function UserAvatar() {
  
   return (
     <div>
-      {session.user?.id}
+      {session.user?.email}
     </div>
   )
 }

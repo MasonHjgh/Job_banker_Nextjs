@@ -18,14 +18,37 @@ const ScrapyControllers = () => {
       console.log(error)
     }
   }
+
+  const sourceDropDownData = [
+    {
+      id: 1,
+      name: "Linkedin",
+    },
+    {
+      id: 2,
+      name: "Indeed",
+    },
+    {
+      id: 3,
+      name: "Glassdoor",
+    },
+  ]
+
   return (
-    <div>
+    <div className="flex">
       <button className="btn join-item" onClick={startScrap}>
         Scrap
       </button>
+      <select className="select select-bordered w-full max-w-xs" disabled>
+        {sourceDropDownData.map((op, index) => (
+          <option key={index} value={op.id}>
+            {op.name}
+          </option>
+        ))}
+      </select>
       <input
         type="text"
-        className=""
+        className="input input-bordered"
         value={scrapUrl}
         onChange={handleUrlChange}
       />

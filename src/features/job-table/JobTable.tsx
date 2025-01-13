@@ -8,36 +8,10 @@ import { ReactHookFormAdd } from "app/services/ReactHookFormAdd"
 import { StatusDropdownData } from "Resources/DropDownsData"
 import { type Job } from "@prisma/client"
 import ScrapyControllers from "app/services/scrapyControllers"
+import { parseDateTime } from "utils/helper"
+import { JobTableTitles } from "features/job-table/jobTable.constants"
 
-const tableTitles = [
-  "Select",
-  "Position",
-  "Company",
-  "Salary",
-  "Job Posting",
-  "Application Date",
-  "Contact",
-  "Status",
-  "Interview Date",
-  "Resume Link",
-  "Cover Letter",
-]
 
-export type JobsResponseType = {
-  id: string
-  company_name: string
-  position_name: string
-  salary: string
-  job_link: string
-  job_description: string
-  contact: string
-  status: string
-  application_date: Date | null
-  interview_date: Date | null
-  resume_link: string
-  cover_letter_link: string
-  saved_date: Date | null
-}
 
 const JobTable = () => {
   const [data, setData] = useState<Job[]>([])
@@ -54,7 +28,6 @@ const JobTable = () => {
         method: "GET",
         signal: signal,
       })
-      console.log(newdata)
 
       setData(newdata.data)
     } catch (error) {
@@ -79,7 +52,6 @@ const JobTable = () => {
 
   const addJob = async () => {
     try {
-     
       if (!newItem) return
       if (!newItem.status) {
         newItem.status = "5"
@@ -141,15 +113,7 @@ const JobTable = () => {
     })
   }
 
-  const parseDateTime =(obj: String | Date | null)=>{
-    if(typeof obj === "string"){
-      return new Date(obj).toLocaleDateString();
-    }
-    if(obj instanceof Date){ 
-      return obj.toLocaleDateString();
-    }
-    return "";
-  }
+  
   return (
     <div className="overflow-x-auto">
       <div className="join">
@@ -202,15 +166,14 @@ const JobTable = () => {
         <div>
           <button className="btn join-item">Search</button>
         </div>
-        <ScrapyControllers/>
-    
+        <ScrapyControllers />
       </div>
 
       <table className="table">
         <thead>
           <tr>
             <th></th>
-            {tableTitles.map((title, index) => (
+            {JobTableTitles.map((title, index) => (
               <th key={index}>{title}</th>
             ))}
           </tr>

@@ -1,4 +1,3 @@
-import { connectToDB } from "../../../utils/database.js";
 import { NextResponse, NextRequest } from "next/server.js";
 
 import { PrismaClient } from "@prisma/client";
