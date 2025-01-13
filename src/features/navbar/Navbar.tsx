@@ -1,5 +1,5 @@
 import React from "react";
-import NavBarItem from "features/navbar/NavbarItem123";
+import NavBarItem from "features/navbar/NavbarItem";
 
 
 const navItemList = [
