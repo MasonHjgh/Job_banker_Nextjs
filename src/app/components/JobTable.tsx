@@ -7,6 +7,7 @@ import { ReactHookFormEdit } from "app/services/ReactHookFormEdit"
 import { ReactHookFormAdd } from "app/services/ReactHookFormAdd"
 import { StatusDropdownData } from "Resources/DropDownsData"
 import { type Job } from "@prisma/client"
+import ScrapyControllers from "app/services/scrapyControllers"
 
 const tableTitles = [
   "Select",
@@ -78,7 +79,7 @@ const JobTable = () => {
 
   const addJob = async () => {
     try {
-      console.log(newItem)
+     
       if (!newItem) return
       if (!newItem.status) {
         newItem.status = "5"
@@ -201,6 +202,8 @@ const JobTable = () => {
         <div>
           <button className="btn join-item">Search</button>
         </div>
+        <ScrapyControllers/>
+    
       </div>
 
       <table className="table">
@@ -253,10 +256,6 @@ const JobTable = () => {
                     <td>{row.position_name}</td>
                     <td>{row.company_name}</td>
                     <td>${row.salary}</td>
-                    {/* <td>
-                      
-                      <Link href={row.job_link}>link</Link>
-                    </td> */}
                     <td>
                       {row.job_link && <Link href={row.job_link}>link</Link>}
                     </td>

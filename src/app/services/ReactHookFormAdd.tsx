@@ -15,10 +15,11 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
       <td>
         <input
           {...register("position_name", {
-            onChange: (evt) => onFieldChange("position_name", evt.target.value),
+            onChange: (evt) => onFieldChange("position_name", evt.target.value), 
           })}
           type="text"
           className="input input-bordered w-full"
+          
         />
       </td>
       <td>

@@ -33,8 +33,8 @@ model Job {
   status            String
   application_date  DateTime?
   interview_date    DateTime?
-  resume_link       String   @unique
-  cover_letter_link String   @unique
+  resume_link       String?   @unique
+  cover_letter_link String?   @unique
   applicant         User     @relation(fields: [applicant_id], references: [id])
   applicant_id      Int
   createdAt         DateTime @default(now())
