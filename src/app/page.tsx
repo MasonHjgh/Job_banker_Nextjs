@@ -1,7 +1,7 @@
 //* ======== Libraries
 import Image from "next/image"
 //* ======== Components
-import Login from "features/login"
+import Login from "features/login/Login"
 //* ======== Custom Logic
 //* ======== Assets and styles
 

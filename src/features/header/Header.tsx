@@ -1,6 +1,6 @@
 import React from "react";
-import NavBar from "./NavBar";
-import UserAvatar from "./userAvatar";
+import NavBar from "features/navbar/Navbar";
+import UserAvatar from "features/user-avatar/UserAvatar";
 
 const Header = () => {
   return (

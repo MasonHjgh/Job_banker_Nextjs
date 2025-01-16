@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { ClientApiRequestError, request } from "app/services/api"
+import { ClientApiRequestError, request } from "utils/api"
 const ScrapyControllers = () => {
   const [scrapUrl, set_scrapUrl] = useState("")
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {

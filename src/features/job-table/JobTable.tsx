@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from "react"
 import Link from "next/link"
-import { ClientApiRequestError, request } from "app/services/api"
-import { ReactHookFormEdit } from "app/services/ReactHookFormEdit"
-import { ReactHookFormAdd } from "app/services/ReactHookFormAdd"
+import { ClientApiRequestError, request } from "utils/api"
+import { ReactHookFormEdit } from "features/react-hook-forms/edit/ReactHookFormEdit"
+import { ReactHookFormAdd } from "features/react-hook-forms/add/ReactHookFormAdd"
 import { StatusDropdownData } from "Resources/DropDownsData"
 import { type Job } from "@prisma/client"
-import ScrapyControllers from "app/services/scrapyControllers"
+import ScrapyControllers from "features/scrapy/ScrapyControllers"
 import { parseDateTime } from "utils/helper"
 import { JobTableTitles } from "features/job-table/jobTable.constants"
 
