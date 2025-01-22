@@ -1,14 +1,13 @@
-import React from "react";
-import NavBar from "features/navbar/Navbar";
-import UserAvatar from "features/user-avatar/UserAvatar";
+import React from "react"
+import NavBar from "features/navbar/Navbar"
+
 
 const Header = () => {
   return (
     <div className=" bg-purple">
-      <UserAvatar/>
       <NavBar />
     </div>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

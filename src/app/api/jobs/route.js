@@ -1,9 +1,9 @@
 import { NextResponse, NextRequest } from "next/server.js";
+import { prisma } from "utils/prisma";
+// import { PrismaClient } from "@prisma/client";
+// // GET all Jobs
 
-import { PrismaClient } from "@prisma/client";
-// GET all Jobs
-
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 export async function GET() {
   try {
     

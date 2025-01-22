@@ -6,24 +6,85 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("neon_DATABASE_URL")
-
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
   createdAt DateTime @default(now())
-  jobs      Job[]    // One-to-many relationship with Job
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
 }
 
 model Job {
-  id                Int      @id @default(autoincrement())
+  id                Int       @id @default(autoincrement())
   company_name      String
   position_name     String
   salary            String?
@@ -35,7 +96,6 @@ model Job {
   interview_date    DateTime?
   resume_link       String?   @unique
   cover_letter_link String?   @unique
-  applicant         User     @relation(fields: [applicant_id], references: [id])
-  applicant_id      Int
-  createdAt         DateTime @default(now())
+  applicant_id      String?
+  createdAt         DateTime  @default(now())
 }

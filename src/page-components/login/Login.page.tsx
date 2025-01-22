@@ -1,5 +1,5 @@
 import React from "react"
-import { signIn } from "auth" 
+import { signIn } from "utils/auth" 
 
 
 function Login() {

@@ -1,14 +1,17 @@
-import { auth } from "../../auth"
- 
-export default async function UserAvatar() {
-  const session = await auth()
- 
 
-  if (!session) return null
  
-  return (
-    <div>
-      {session.user?.email}
-    </div>
-  )
-}
+//  import SessionChecker from "features/session-checker/SessionChecker";
+//  type Props = {
+//   pathName: string;
+// };
+// export default function UserAvatar({pathName}:Props) {
+  
+//  const userDetails = SessionChecker()
+//   return (
+//     <div>
+//       {userDetails ? userDetails.email : ""}
+//     </div>
+//   )
+
+  
+// }
