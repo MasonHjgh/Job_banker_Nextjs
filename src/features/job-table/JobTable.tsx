@@ -10,17 +10,19 @@ import { type Job } from "@prisma/client"
 import ScrapyControllers from "features/scrapy/ScrapyControllers"
 import { parseDateTime } from "utils/helper"
 import { JobTableTitles } from "features/job-table/jobTable.constants"
+import { set } from "react-hook-form"
 
-
-
-const JobTable = () => {
+type Props = {
+  userData: any
+}
+const JobTable = ({ userData }: Props) => {
   const [data, setData] = useState<Job[]>([])
 
   //selected item handler
   const [selectedItem, setSelectedItem] = useState<Job | null>(null)
   const [isAddingItem, setIsAddingItem] = useState(false)
   const [newItem, setNewItem] = useState<Job | null>(null)
-
+  // const { data: session } = useSession()
   const fetchData = async (signal?: AbortSignal) => {
     try {
       const newdata = await request<Job[]>({
@@ -53,14 +55,18 @@ const JobTable = () => {
   const addJob = async () => {
     try {
       if (!newItem) return
+
+      let itemToAdd = { ...newItem, applicant_id: userData.id }
       if (!newItem.status) {
-        newItem.status = "5"
+        itemToAdd = { ...itemToAdd, status: "5" }
       }
-      const result = await request<Job>({
+
+      await request<Job>({
         url: "/jobs",
         method: "POST",
-        data: newItem,
+        data: itemToAdd,
       })
+
       setNewItem(null)
       setIsAddingItem(false)
 
@@ -113,7 +119,6 @@ const JobTable = () => {
     })
   }
 
-  
   return (
     <div className="overflow-x-auto">
       <div className="join">

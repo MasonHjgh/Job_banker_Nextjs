@@ -12,7 +12,7 @@ async function Dashboard() {
     redirect("/login")
   }
 
-  return <JobTable />
+  return <JobTable userData={session.user}/>
 }
 
 export default Dashboard

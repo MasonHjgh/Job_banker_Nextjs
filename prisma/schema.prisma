@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
@@ -26,6 +26,7 @@ model User {
   Authenticator Authenticator[]
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
+  Job           Job[]
 }
 
 model Account {
@@ -96,6 +97,7 @@ model Job {
   interview_date    DateTime?
   resume_link       String?   @unique
   cover_letter_link String?   @unique
-  applicant_id      String?
+  applicant_id      String
+  user              User      @relation(fields: [applicant_id], references: [id], onDelete: Cascade)
   createdAt         DateTime  @default(now())
 }
