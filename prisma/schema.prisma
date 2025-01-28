@@ -95,8 +95,8 @@ model Job {
   status            String
   application_date  DateTime?
   interview_date    DateTime?
-  resume_link       String?   @unique
-  cover_letter_link String?   @unique
+  resume_link       String?   
+  cover_letter_link String?   
   applicant_id      String
   user              User      @relation(fields: [applicant_id], references: [id], onDelete: Cascade)
   createdAt         DateTime  @default(now())

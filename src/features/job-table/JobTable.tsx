@@ -10,7 +10,7 @@ import { type Job } from "@prisma/client"
 import ScrapyControllers from "features/scrapy/ScrapyControllers"
 import { parseDateTime } from "utils/helper"
 import { JobTableTitles } from "features/job-table/jobTable.constants"
-import { set } from "react-hook-form"
+import JobTableForm from "features/react-hook-forms/JobTableForm"
 
 type Props = {
   userData: any
@@ -22,7 +22,7 @@ const JobTable = ({ userData }: Props) => {
   const [selectedItem, setSelectedItem] = useState<Job | null>(null)
   const [isAddingItem, setIsAddingItem] = useState(false)
   const [newItem, setNewItem] = useState<Job | null>(null)
-  // const { data: session } = useSession()
+
   const fetchData = async (signal?: AbortSignal) => {
     try {
       const newdata = await request<Job[]>({
@@ -171,8 +171,15 @@ const JobTable = ({ userData }: Props) => {
         <div>
           <button className="btn join-item">Search</button>
         </div>
-        <ScrapyControllers />
+        <ScrapyControllers userData={userData}/>
       </div>
+
+{/* {isAddingItem ? (
+           <div className="pt-5 ">
+              <JobTableForm/>
+              </div>
+          
+          ) : null} */}
 
       <table className="table">
         <thead>
@@ -189,6 +196,7 @@ const JobTable = ({ userData }: Props) => {
             <tr>
               <th></th>
               <th></th>
+         
               <ReactHookFormAdd onFieldChange={newItemFieldUpdate} />
             </tr>
           ) : null}

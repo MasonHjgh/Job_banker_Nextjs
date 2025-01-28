@@ -1,9 +1,7 @@
 import { NextResponse, NextRequest } from "next/server.js"
 import { prisma } from "utils/prisma"
-// import { PrismaClient } from "@prisma/client";
-// // GET all Jobs
 
-// const prisma = new PrismaClient();
+// GET all Jobs
 export async function GET() {
   try {
     const results = await prisma.job.findMany()
@@ -45,15 +43,24 @@ export async function PUT(request) {
 }
 
 // Add Job
-// TODO: Fix Date in the front end
-// TODO: Fix Date Applicant Id after auth
 export async function POST(request) {
   try {
     // Parse the incoming request body
     const jobData = await request.json()
-
+    
+    if (jobData.application_date){
+      jobData.application_date = new Date(jobData.application_date)
+    }else{
+      jobData.application_date = null
+    }
+    if (jobData.interview_date){
+      jobData.interview_date = new Date(jobData.interview_date)
+    } else {
+      jobData.interview_date = null
+    }
+  
+    
     // Use Prisma's create method to insert a new job into the database
-    console.log(jobData)
     const job = await prisma.job.create({
       data: {
         company_name: jobData.company_name,
@@ -63,12 +70,8 @@ export async function POST(request) {
         job_description: jobData.job_link || null, // Optional field, so fallback to null if not provided
         contact: jobData.contact,
         status: jobData.status, // Assuming status is a string, not a number
-        application_date: jobData.application_date
-          ? new Date(jobData.application_date)
-          : null, // Ensure it's a Date object or null
-        interview_date: jobData.interview_date
-          ? new Date(jobData.interview_date)
-          : null, // Ensure it's a Date object or null
+        application_date: jobData.application_date,
+        interview_date: jobData.interview_date,
         resume_link: jobData.resume_link,
         cover_letter_link: jobData.cover_letter_link,
         applicant_id: jobData.applicant_id, // Assuming applicant_id is always 1 for now
@@ -86,6 +89,7 @@ export async function POST(request) {
       message: "Failed to add job",
       status: 500,
       error: error.message,
+   
     })
   }
 }

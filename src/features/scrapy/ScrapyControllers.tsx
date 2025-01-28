@@ -1,19 +1,36 @@
+import type { Job } from "@prisma/client"
+import Modal from "components/Modal"
+import ScrapyJobForm from "features/react-hook-forms/ScrapyJobForm"
+import { url } from "inspector"
 import React, { useState } from "react"
 import { ClientApiRequestError, request } from "utils/api"
-const ScrapyControllers = () => {
+
+
+type Props = {
+  userData: any
+}
+
+const ScrapyControllers = ({userData}:Props) => {
   const [scrapUrl, set_scrapUrl] = useState("")
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value) setUrlError("")
     set_scrapUrl(event.target.value)
   }
-
+  const [urlError, setUrlError] = useState("")
+  const [scrapData, setScrapData] = useState<Job | null>(null)
   const startScrap = async () => {
     try {
+      if (!scrapUrl) {
+        setUrlError("Please enter a url")
+        return
+      }
       const result = await request<any>({
         url: "/extraction",
         method: "POST",
         data: scrapUrl,
       })
-      console.log(result)
+      setScrapData(result.data)
+      handleModalOpen()
     } catch (error) {
       console.log(error)
     }
@@ -34,6 +51,13 @@ const ScrapyControllers = () => {
     },
   ]
 
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const handleModalOpen = () => {
+    setIsModalOpen(true)
+  }
+  const handleModalClose = () => {
+    setIsModalOpen(false)
+  }
   return (
     <div className="flex">
       <button className="btn join-item" onClick={startScrap}>
@@ -46,12 +70,22 @@ const ScrapyControllers = () => {
           </option>
         ))}
       </select>
-      <input
-        type="text"
-        className="input input-bordered"
-        value={scrapUrl}
-        onChange={handleUrlChange}
-      />
+      <div className="flex flex-col">
+        <label htmlFor="scrap_url" className="mb-1 text-sm">
+          Scrap Url
+        </label>
+        <input
+          type="text"
+          className="input input-bordered"
+          value={scrapUrl}
+          name="scrap_url"
+          onChange={handleUrlChange}
+        />
+        {urlError && <p className="text-red-500 text-sm">{urlError}</p>}
+      </div>
+      <Modal isOpen={isModalOpen} closeModal={handleModalClose}>
+        <ScrapyJobForm jobData={scrapData} userData={userData}/>
+      </Modal>
     </div>
   )
 }
