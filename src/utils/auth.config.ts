@@ -16,9 +16,10 @@ export default {
     async session({ session, token }) {
       // Attach user ID to the session object
       if (token?.id) {
-        session.user.id = token.id;
+        session.user.id = token.id as string;
       }
       return session;
     },
   },
 } satisfies NextAuthConfig
+
