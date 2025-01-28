@@ -1,5 +1,5 @@
 import React from "react"
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, type SubmitHandler } from "react-hook-form"
 import { StatusDropdownData } from "Resources/DropDownsData"
 import { type Job } from "@prisma/client"
 import { request } from "utils/api"
