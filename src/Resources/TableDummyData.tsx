@@ -1,27 +1,27 @@
-import { type Job } from "@prisma/client"
+// import { type Job } from "@prisma/client"
 
 
-const tableData: Job[] = [
-  {
-    id: 1,
-    company_name: "Tech Corp",
-    position_name: "Software Engineer",
-    salary: "100,000",
-    job_link: "https://techcorp.jobs/software-engineer",
-    job_description: "Develop and maintain software applications.",
-    contact: "john.doe@techcorp.com",
-    status: "Applied",
-    application_date: new Date("2023-01-15"),
-    interview_date: new Date("2023-01-20"),
-    resume_link: "https://myresume.com/johndoe",
-    cover_letter_link: "https://myresume.com/lindagreen",
-    applicant_id: 1,
-    createdAt: new Date(),
-  },
-  // Add other job entries...
-];
+// const tableData: Job[] = [
+//   {
+//     id: 1,
+//     company_name: "Tech Corp",
+//     position_name: "Software Engineer",
+//     salary: "100,000",
+//     job_link: "https://techcorp.jobs/software-engineer",
+//     job_description: "Develop and maintain software applications.",
+//     contact: "john.doe@techcorp.com",
+//     status: "Applied",
+//     application_date: new Date("2023-01-15"),
+//     interview_date: new Date("2023-01-20"),
+//     resume_link: "https://myresume.com/johndoe",
+//     cover_letter_link: "https://myresume.com/lindagreen",
+//     applicant_id: "1",
+//     createdAt: new Date(),
+//   },
+//   // Add other job entries...
+// ];
 
-export default tableData;
+// export default tableData;
 
 
 
