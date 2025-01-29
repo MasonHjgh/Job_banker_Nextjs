@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useRef ,useEffect, useState } from "react"
 import Link from "next/link"
 import { ClientApiRequestError, request } from "utils/api"
 import { ReactHookFormEdit } from "features/react-hook-forms/edit/ReactHookFormEdit"
@@ -11,7 +11,7 @@ import ScrapyControllers from "features/scrapy/ScrapyControllers"
 import { parseDateTime } from "utils/helper"
 import { JobTableTitles } from "features/job-table/jobTable.constants"
 import JobTableForm from "features/react-hook-forms/JobTableForm"
-
+import Loading from "components/Loading"
 type Props = {
   userData: any
 }
@@ -24,20 +24,28 @@ const JobTable = ({ userData }: Props) => {
   const [newItem, setNewItem] = useState<Job | null>(null)
 
   const fetchData = async (signal?: AbortSignal) => {
+    loadingRef.current?.handleIsLoading(true);
     try {
       const newdata = await request<Job[]>({
         url: "/jobs",
         method: "GET",
         signal: signal,
       })
-
       setData(newdata.data)
     } catch (error) {
       console.log(error)
+  
+    } finally {
+      loadingRef.current?.handleIsLoading(false);
     }
-  }
 
+  }
+  const loadingRef = useRef<{ handleIsLoading: (enabled: boolean) => void } | null>(null);
+
+
+  
   const editJob = async () => {
+    loadingRef.current?.handleIsLoading(true);
     try {
       const result = await request<Job>({
         url: "/jobs",
@@ -53,6 +61,7 @@ const JobTable = ({ userData }: Props) => {
   }
 
   const addJob = async () => {
+    loadingRef.current?.handleIsLoading(true);
     try {
       if (!newItem) return
 
@@ -78,6 +87,7 @@ const JobTable = ({ userData }: Props) => {
   }
 
   const deleteJob = async () => {
+    loadingRef.current?.handleIsLoading(true);
     try {
       const result = await request<Job>({
         url: `/jobs`,
@@ -121,6 +131,7 @@ const JobTable = ({ userData }: Props) => {
 
   return (
     <div className="overflow-x-auto">
+      <Loading ref={loadingRef} />
       <div className="join">
         <div>
           {isAddingItem === false ? (
@@ -171,10 +182,10 @@ const JobTable = ({ userData }: Props) => {
         <div>
           <button className="btn join-item">Search</button>
         </div>
-        <ScrapyControllers userData={userData}/>
+        <ScrapyControllers userData={userData} />
       </div>
 
-{/* {isAddingItem ? (
+      {/* {isAddingItem ? (
            <div className="pt-5 ">
               <JobTableForm/>
               </div>
@@ -196,7 +207,7 @@ const JobTable = ({ userData }: Props) => {
             <tr>
               <th></th>
               <th></th>
-         
+
               <ReactHookFormAdd onFieldChange={newItemFieldUpdate} />
             </tr>
           ) : null}

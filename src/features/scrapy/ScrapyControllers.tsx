@@ -1,9 +1,9 @@
 import type { Job } from "@prisma/client"
 import Modal from "components/Modal"
 import ScrapyJobForm from "features/react-hook-forms/ScrapyJobForm"
-import { url } from "inspector"
+
 import React, { useState } from "react"
-import { ClientApiRequestError, request } from "utils/api"
+import {  request } from "utils/api"
 
 
 type Props = {

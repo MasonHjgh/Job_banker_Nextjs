@@ -17,7 +17,7 @@ type JobFormInputs = {
   applicant_id: string
 }
 
-const JobForm: React.FC = () => {
+const JobForm= () => {
   const {
     register,
     handleSubmit,
