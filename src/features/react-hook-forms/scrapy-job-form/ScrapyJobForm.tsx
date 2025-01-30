@@ -1,6 +1,6 @@
 import React from "react"
 import { useForm, type SubmitHandler } from "react-hook-form"
-import { StatusDropdownData } from "Resources/DropDownsData"
+import { StatusDropdownData } from "utils/constants"
 import { type Job } from "@prisma/client"
 import { request } from "utils/api"
 
@@ -22,8 +22,9 @@ type JobFormInputs = {
 type Props = {
   jobData: Job | null
   userData: any
+  closeModal: () => void
 }
-const JobForm = ({ jobData, userData }: Props) => {
+const JobForm = ({ jobData, userData, closeModal }: Props) => {
   const {
     register,
     handleSubmit,
@@ -42,7 +43,7 @@ const JobForm = ({ jobData, userData }: Props) => {
         method: "POST",
         data: data,
       })
-
+      closeModal()
     } catch (error) {
       console.log(error)
     }

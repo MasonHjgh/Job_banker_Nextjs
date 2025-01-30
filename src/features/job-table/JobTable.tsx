@@ -1,11 +1,11 @@
 "use client"
 
-import React, { useRef ,useEffect, useState } from "react"
+import React, { useRef, useEffect, useState } from "react"
 import Link from "next/link"
-import { ClientApiRequestError, request } from "utils/api"
+import { request } from "utils/api"
 import { ReactHookFormEdit } from "features/react-hook-forms/edit/ReactHookFormEdit"
 import { ReactHookFormAdd } from "features/react-hook-forms/add/ReactHookFormAdd"
-import { StatusDropdownData } from "Resources/DropDownsData"
+import { StatusDropdownData } from "utils/constants"
 import { type Job } from "@prisma/client"
 import ScrapyControllers from "features/scrapy/ScrapyControllers"
 import { parseDateTime } from "utils/helper"
@@ -24,7 +24,7 @@ const JobTable = ({ userData }: Props) => {
   const [newItem, setNewItem] = useState<Job | null>(null)
 
   const fetchData = async (signal?: AbortSignal) => {
-    loadingRef.current?.handleIsLoading(true);
+    loadingRef.current?.handleIsLoading(true)
     try {
       const newdata = await request<Job[]>({
         url: "/jobs",
@@ -34,18 +34,16 @@ const JobTable = ({ userData }: Props) => {
       setData(newdata.data)
     } catch (error) {
       console.log(error)
-  
     } finally {
-      loadingRef.current?.handleIsLoading(false);
+      loadingRef.current?.handleIsLoading(false)
     }
-
   }
-  const loadingRef = useRef<{ handleIsLoading: (enabled: boolean) => void } | null>(null);
+  const loadingRef = useRef<{
+    handleIsLoading: (enabled: boolean) => void
+  } | null>(null)
 
-
-  
   const editJob = async () => {
-    loadingRef.current?.handleIsLoading(true);
+    loadingRef.current?.handleIsLoading(true)
     try {
       const result = await request<Job>({
         url: "/jobs",
@@ -61,7 +59,7 @@ const JobTable = ({ userData }: Props) => {
   }
 
   const addJob = async () => {
-    loadingRef.current?.handleIsLoading(true);
+    loadingRef.current?.handleIsLoading(true)
     try {
       if (!newItem) return
 
@@ -87,7 +85,7 @@ const JobTable = ({ userData }: Props) => {
   }
 
   const deleteJob = async () => {
-    loadingRef.current?.handleIsLoading(true);
+    loadingRef.current?.handleIsLoading(true)
     try {
       const result = await request<Job>({
         url: `/jobs`,
@@ -138,6 +136,7 @@ const JobTable = ({ userData }: Props) => {
             <button
               className="btn join-item"
               onClick={() => setIsAddingItem(true)}
+              disabled={selectedItem != null}
             >
               Add
             </button>
@@ -165,7 +164,7 @@ const JobTable = ({ userData }: Props) => {
             onClick={editJob}
             disabled={!selectedItem}
           >
-            Edit
+            {selectedItem ? "Save" : "Edit"}
           </button>
         </div>
 
@@ -254,8 +253,17 @@ const JobTable = ({ userData }: Props) => {
                       )?.name || "Unknown Status"}
                     </td>
                     <td> {parseDateTime(row.interview_date)}</td>
-                    <td>{row.resume_link}</td>
-                    <td>{row.cover_letter_link}</td>
+                    <td>
+                      {row.resume_link && (
+                        <Link href={row.resume_link}>link</Link>
+                      )}
+                    </td>
+
+                    <td>
+                      {row.cover_letter_link && (
+                        <Link href={row.cover_letter_link}>link</Link>
+                      )}
+                    </td>
                   </>
                 )}
               </tr>

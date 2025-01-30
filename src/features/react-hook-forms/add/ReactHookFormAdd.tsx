@@ -1,7 +1,7 @@
 
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { StatusDropdownData } from "Resources/DropDownsData";
+import { StatusDropdownData} from "utils/constants";
 import  type {Job} from "@prisma/client";
 
 type Props = {

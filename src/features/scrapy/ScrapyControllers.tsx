@@ -1,16 +1,14 @@
 import type { Job } from "@prisma/client"
 import Modal from "components/Modal"
-import ScrapyJobForm from "features/react-hook-forms/ScrapyJobForm"
-
+import ScrapyJobForm from "features/react-hook-forms/scrapy-job-form/ScrapyJobForm"
 import React, { useState } from "react"
-import {  request } from "utils/api"
-
+import { request } from "utils/api"
 
 type Props = {
   userData: any
 }
 
-const ScrapyControllers = ({userData}:Props) => {
+const ScrapyControllers = ({ userData }: Props) => {
   const [scrapUrl, set_scrapUrl] = useState("")
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value) setUrlError("")
@@ -84,7 +82,11 @@ const ScrapyControllers = ({userData}:Props) => {
         {urlError && <p className="text-red-500 text-sm">{urlError}</p>}
       </div>
       <Modal isOpen={isModalOpen} closeModal={handleModalClose}>
-        <ScrapyJobForm jobData={scrapData} userData={userData}/>
+        <ScrapyJobForm
+          jobData={scrapData}
+          userData={userData}
+          closeModal={handleModalClose}
+        />
       </Modal>
     </div>
   )

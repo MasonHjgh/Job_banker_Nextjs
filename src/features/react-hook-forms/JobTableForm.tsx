@@ -1,6 +1,6 @@
 import React from "react"
 import { useForm, type SubmitHandler } from "react-hook-form"
-import { StatusDropdownData } from "Resources/DropDownsData"
+import { StatusDropdownData} from "utils/constants"
 
 type JobFormInputs = {
   company_name: string
