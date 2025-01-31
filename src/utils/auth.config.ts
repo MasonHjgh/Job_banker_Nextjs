@@ -5,7 +5,8 @@ import type { NextAuthConfig } from "next-auth"
 export default {
   providers: [Google],
   pages: {
-    signIn: "/login", // 👈 Redirects users to a custom login page
+    signIn: "/login",
+    signOut: "/login"  // 👈 Redirects users to a custom login page
   },
   callbacks: {
     async jwt({ token, user }) {

@@ -185,7 +185,7 @@ const JobTable = ({ userData }: Props) => {
         </div>
 
         <div>
-          <button className="btn join-item">Search</button>
+          <button className="btn join-item" disabled>Search</button>
         </div>
         <ScrapyControllers userData={userData.user} />
       </div>

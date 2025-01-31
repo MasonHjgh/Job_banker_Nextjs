@@ -1,12 +1,12 @@
-import React from "react";
-import NavBarItem from "features/navbar/NavbarItem";
-
+import React from "react"
+import NavBarItem from "features/navbar/NavbarItem"
+import UserMenu from "features/user-menu/UserMenu"
 
 const navItemList = [
   { address: "/", text: "home" },
   { address: "/", text: "about" },
   { address: "/", text: "contact us" },
-];
+]
 const NavBar = () => {
 
   return (
@@ -18,8 +18,9 @@ const NavBar = () => {
           ))}
         </ul>
       </div>
+      <UserMenu />
     </div>
-  );
-};
+  )
+}
 
-export default NavBar;
+export default NavBar
