@@ -5,7 +5,7 @@ import Header from "features/header/Header";
 import Footer from "features/footer/Footer";
 import { SessionProvider } from "next-auth/react"
 import { type Session } from "next-auth";
-import Loading2 from "components/Loading2";
+import Loading from "components/Loading";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={inter.className}>
       <SessionProvider session={session}>
         <Header />
-        <Loading2 />
+        <Loading />
         <main className="container mx-auto pt-20 min-h-screen">{children}</main>
         <Footer />
         </SessionProvider>

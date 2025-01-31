@@ -11,7 +11,6 @@ import ScrapyControllers from "features/scrapy/ScrapyControllers"
 import { parseDateTime } from "utils/helper"
 import { JobTableTitles } from "features/job-table/jobTable.constants"
 import JobTableForm from "features/react-hook-forms/JobTableForm"
-import Loading from "components/Loading"
 import { type Session } from "next-auth"
 import { useJobStore, useLoadingStore } from "providers/Store"
 
