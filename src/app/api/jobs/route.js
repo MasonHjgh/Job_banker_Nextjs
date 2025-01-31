@@ -1,16 +1,24 @@
 import { NextResponse, NextRequest } from "next/server.js"
 import { prisma } from "utils/prisma"
-
+import { auth } from "utils/auth"
 // GET all Jobs
-export async function GET() {
+export async function GET(req) {
   try {
-    const results = await prisma.job.findMany()
+    const session = await auth()
+
+    if (!session){
+      return NextResponse.json({message: "Unauthorized", status: 401})
+    }
+    const results = await prisma.job.findMany({
+      where: { applicant_id: session.user.id },
+    })
     return NextResponse.json(results)
   } catch (error) {
     console.log(error)
     return NextResponse.json(error)
   }
 }
+
 
 // Edit Job
 export async function PUT(request) {
@@ -34,7 +42,7 @@ export async function PUT(request) {
         cover_letter_link: job.cover_letter_link,
       },
     })
-   
+
     return NextResponse.json(updatedJob)
   } catch (error) {
     console.log(error)
@@ -47,19 +55,18 @@ export async function POST(request) {
   try {
     // Parse the incoming request body
     const jobData = await request.json()
-    
-    if (jobData.application_date){
+
+    if (jobData.application_date) {
       jobData.application_date = new Date(jobData.application_date)
-    }else{
+    } else {
       jobData.application_date = null
     }
-    if (jobData.interview_date){
+    if (jobData.interview_date) {
       jobData.interview_date = new Date(jobData.interview_date)
     } else {
       jobData.interview_date = null
     }
-  
-    
+
     // Use Prisma's create method to insert a new job into the database
     const job = await prisma.job.create({
       data: {
@@ -89,7 +96,6 @@ export async function POST(request) {
       message: "Failed to add job",
       status: 500,
       error: error.message,
-   
     })
   }
 }

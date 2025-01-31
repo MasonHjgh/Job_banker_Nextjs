@@ -6,7 +6,6 @@ import axios from "axios"
 const prisma = new PrismaClient()
 import { URL } from "url"
 
-
 const urlLists = [
   { id: 1, name: "Linkedin", url: "www.linkedin.com", path: "/jobs/view/" },
   { id: 2, name: "Indeed", url: "www.indeed.com", path: "/job" },
@@ -18,17 +17,17 @@ export async function POST(request) {
     const jobUrl = await request.json()
     const url = new URL(jobUrl)
     const matchingSite = getMatchingSite(url)
-    console.log(jobUrl, matchingSite,url)
+
     // Check if the URL is supported
     if (!matchingSite) {
-      return Promise.reject(new Error("UR not supported"));
+      return Promise.reject(new Error("UR not supported"))
     }
     // Parse the URL and add the path if it is missing
     const newJobUrl = parsePath(url, matchingSite)
 
     const { data: html } = await axios.get(newJobUrl.href)
 
-    const results = extractData(html, matchingSite)
+    const results = extractData(html, matchingSite, newJobUrl.href)
 
     return NextResponse.json(results)
   } catch (error) {
@@ -37,31 +36,27 @@ export async function POST(request) {
   }
 }
 
-function extractData(html, matchingSite) {
+function extractData(html, matchingSite, jobUrl) {
   switch (matchingSite.id) {
     case 1: //Linkedin
-      return extractDataLinkedin(html)
+      return extractDataLinkedin(html, jobUrl)
 
     case 2: //Indeed
-      return extractDataIndeed(html)
+      return extractDataIndeed(html, jobUrl)
 
     case 3: //Glassdoor
-      return extractDataGlassdoor(html)
+      return extractDataGlassdoor(html, jobUrl)
   }
 }
 
 // Function to parse the URL and add the path if it is missing
 function parsePath(inputUrl, site) {
   try {
-    
-   
     switch (site.id) {
       case 1: //Linkedin
-      
         if (!inputUrl.pathname.includes(site.path)) {
-          console.log("inside")
-          inputUrl.pathname = site.path + inputUrl.searchParams.get("currentJobId")
-          console.log(inputUrl)
+          inputUrl.pathname =
+            site.path + inputUrl.searchParams.get("currentJobId")
         }
       case 2: //Indeed
       case 3: //Glassdoor
@@ -86,15 +81,18 @@ function getMatchingSite(inputUrl) {
 }
 
 // Function to extract data from the Linkedin HTML
-function extractDataLinkedin(html) {
+function extractDataLinkedin(html, jobUrl) {
   const $ = cheerio.load(html)
   const position_name = $(".topcard__title").text().trim()
   const company_name = $(".topcard__org-name-link").text().trim()
   const salary = $(".salary").text().trim()
+  const contact = $(".message-the-recruiter a ").attr("href")
   return {
     position_name: position_name,
     company_name: company_name,
     salary: salary,
+    contact: contact,
+    job_link: jobUrl,
   }
 }
 

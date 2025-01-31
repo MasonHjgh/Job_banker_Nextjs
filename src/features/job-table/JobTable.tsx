@@ -12,8 +12,11 @@ import { parseDateTime } from "utils/helper"
 import { JobTableTitles } from "features/job-table/jobTable.constants"
 import JobTableForm from "features/react-hook-forms/JobTableForm"
 import Loading from "components/Loading"
+import { type Session } from "next-auth"
+
+
 type Props = {
-  userData: any
+  userData: Session
 }
 const JobTable = ({ userData }: Props) => {
   const [data, setData] = useState<Job[]>([])
@@ -22,12 +25,13 @@ const JobTable = ({ userData }: Props) => {
   const [selectedItem, setSelectedItem] = useState<Job | null>(null)
   const [isAddingItem, setIsAddingItem] = useState(false)
   const [newItem, setNewItem] = useState<Job | null>(null)
+  
 
   const fetchData = async (signal?: AbortSignal) => {
     loadingRef.current?.handleIsLoading(true)
     try {
       const newdata = await request<Job[]>({
-        url: "/jobs",
+        url: `/jobs`,
         method: "GET",
         signal: signal,
       })
@@ -63,7 +67,7 @@ const JobTable = ({ userData }: Props) => {
     try {
       if (!newItem) return
 
-      let itemToAdd = { ...newItem, applicant_id: userData.id }
+      let itemToAdd = { ...newItem, applicant_id: userData.user?.id }
       if (!newItem.status) {
         itemToAdd = { ...itemToAdd, status: "5" }
       }
@@ -181,7 +185,7 @@ const JobTable = ({ userData }: Props) => {
         <div>
           <button className="btn join-item">Search</button>
         </div>
-        <ScrapyControllers userData={userData} />
+        <ScrapyControllers userData={userData.user} />
       </div>
 
       {/* {isAddingItem ? (
