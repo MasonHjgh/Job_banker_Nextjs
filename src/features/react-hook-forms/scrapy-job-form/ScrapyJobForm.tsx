@@ -3,7 +3,7 @@ import { useForm, type SubmitHandler } from "react-hook-form"
 import { StatusDropdownData } from "utils/constants"
 import { type Job } from "@prisma/client"
 import { request } from "utils/api"
-
+import { useLoadingStore, useJobStore } from "providers/Store"
 type JobFormInputs = {
   company_name: string
   position_name: string
@@ -31,9 +31,11 @@ const JobForm = ({ jobData, userData, closeModal }: Props) => {
     reset,
     formState: { errors },
   } = useForm<Job>()
-
+const {setIsLoading} = useLoadingStore()
+const {setrefreshJobs} = useJobStore()
   const onSubmit: SubmitHandler<Job> = async (data) => {
     try {
+      setIsLoading(true)
       if (!data) return
 
       data.applicant_id = userData.id
@@ -46,6 +48,9 @@ const JobForm = ({ jobData, userData, closeModal }: Props) => {
       closeModal()
     } catch (error) {
       console.log(error)
+    } finally {
+      setrefreshJobs()
+      setIsLoading(false)
     }
   }
 

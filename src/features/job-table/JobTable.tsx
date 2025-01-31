@@ -13,6 +13,7 @@ import { JobTableTitles } from "features/job-table/jobTable.constants"
 import JobTableForm from "features/react-hook-forms/JobTableForm"
 import Loading from "components/Loading"
 import { type Session } from "next-auth"
+import { useJobStore, useLoadingStore } from "providers/Store"
 
 
 type Props = {
@@ -25,10 +26,11 @@ const JobTable = ({ userData }: Props) => {
   const [selectedItem, setSelectedItem] = useState<Job | null>(null)
   const [isAddingItem, setIsAddingItem] = useState(false)
   const [newItem, setNewItem] = useState<Job | null>(null)
-  
+  const {refreshJobs} = useJobStore()
+  const {setIsLoading} = useLoadingStore()
 
   const fetchData = async (signal?: AbortSignal) => {
-    loadingRef.current?.handleIsLoading(true)
+    setIsLoading(true)
     try {
       const newdata = await request<Job[]>({
         url: `/jobs`,
@@ -39,15 +41,13 @@ const JobTable = ({ userData }: Props) => {
     } catch (error) {
       console.log(error)
     } finally {
-      loadingRef.current?.handleIsLoading(false)
+      setIsLoading(false)
     }
   }
-  const loadingRef = useRef<{
-    handleIsLoading: (enabled: boolean) => void
-  } | null>(null)
+
 
   const editJob = async () => {
-    loadingRef.current?.handleIsLoading(true)
+    setIsLoading(true)
     try {
       const result = await request<Job>({
         url: "/jobs",
@@ -59,11 +59,13 @@ const JobTable = ({ userData }: Props) => {
       fetchData()
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const addJob = async () => {
-    loadingRef.current?.handleIsLoading(true)
+    setIsLoading(true)
     try {
       if (!newItem) return
 
@@ -85,11 +87,13 @@ const JobTable = ({ userData }: Props) => {
       fetchData()
     } catch (error) {
       console.log(error)
+    }finally {
+      setIsLoading(false)
     }
   }
 
   const deleteJob = async () => {
-    loadingRef.current?.handleIsLoading(true)
+    setIsLoading(true)
     try {
       const result = await request<Job>({
         url: `/jobs`,
@@ -102,19 +106,18 @@ const JobTable = ({ userData }: Props) => {
       fetchData()
     } catch (error) {
       console.log(error)
+    }finally {
+      setIsLoading(false)
     }
   }
 
   useEffect(() => {
-    const abortController = new AbortController()
-
-    fetchData(abortController.signal)
-    fetchData()
-
+    const controller = new AbortController()
+    fetchData(controller.signal)
     return () => {
-      abortController.abort()
+      controller.abort()
     }
-  }, [])
+  }, [refreshJobs])
 
   const onFieldUpdate = (field: keyof Job, value: any) => {
     setSelectedItem((prevState) => {
@@ -133,7 +136,7 @@ const JobTable = ({ userData }: Props) => {
 
   return (
     <div className="overflow-x-auto">
-      <Loading ref={loadingRef} />
+      
       <div className="join">
         <div>
           {isAddingItem === false ? (

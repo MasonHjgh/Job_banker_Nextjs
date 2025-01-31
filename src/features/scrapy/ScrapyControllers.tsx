@@ -3,13 +3,14 @@ import Modal from "components/Modal"
 import ScrapyJobForm from "features/react-hook-forms/scrapy-job-form/ScrapyJobForm"
 import React, { useState } from "react"
 import { request } from "utils/api"
-
+import { useLoadingStore } from "providers/Store"
 type Props = {
   userData: any
 }
 
 const ScrapyControllers = ({ userData }: Props) => {
   const [scrapUrl, set_scrapUrl] = useState("")
+    const {setIsLoading} = useLoadingStore()
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value) setUrlError("")
     set_scrapUrl(event.target.value)
@@ -18,6 +19,7 @@ const ScrapyControllers = ({ userData }: Props) => {
   const [scrapData, setScrapData] = useState<Job | null>(null)
   const startScrap = async () => {
     try {
+      setIsLoading(true)
       if (!scrapUrl) {
         setUrlError("Please enter a url")
         return
@@ -31,6 +33,8 @@ const ScrapyControllers = ({ userData }: Props) => {
       handleModalOpen()
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
