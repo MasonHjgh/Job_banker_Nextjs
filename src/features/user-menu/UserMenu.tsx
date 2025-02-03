@@ -22,14 +22,14 @@ export default async function UserMenu() {
     }
 
   return (
-    <div className="ml-auto pr-5">
+    <div className="pr-5">
       <div className="dropdown">
         <div tabIndex={0} role="button" className="btn m-1">
           Account
         </div>
         <ul
           tabIndex={0}
-          className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+          className="dropdown-content menu bg-base-100 rounded-box z-[1] w-22 p-2 shadow"
         >
           <li>
             <a>Profile</a>

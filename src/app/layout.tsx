@@ -6,6 +6,8 @@ import Footer from "features/footer/Footer";
 import { SessionProvider } from "next-auth/react"
 import { type Session } from "next-auth";
 import Loading from "components/Loading";
+import UserSessionProvider from "providers/UserSessionProvider";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -14,22 +16,20 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
-  session}: Readonly<{
-  children: React.ReactNode,
-  session: Session | null;
+  children}: Readonly<{
+  children: React.ReactNode
 }>) {
 
   
   return (
-    <html lang="en">
+    <html lang="en" data-theme="emerald">
       <body className={inter.className}>
-      <SessionProvider session={session}>
+      <UserSessionProvider >
         <Header />
         <Loading />
         <main className="container mx-auto pt-20 min-h-screen">{children}</main>
         <Footer />
-        </SessionProvider>
+        </UserSessionProvider>
       </body>
     </html>
   );

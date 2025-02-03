@@ -18,7 +18,7 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
             onChange: (evt) => onFieldChange("position_name", evt.target.value), 
           })}
           type="text"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full text-sm"
           
         />
       </td>
@@ -28,7 +28,7 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
             onChange: (evt) => onFieldChange("company_name", evt.target.value),
           })}
           type="text"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full text-sm"
         />
       </td>
       <td>
@@ -37,7 +37,7 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
             onChange: (evt) => onFieldChange("salary", evt.target.value),
           })}
           type="text"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full text-sm"
         />
       </td>
       <td>
@@ -46,7 +46,7 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
             onChange: (evt) => onFieldChange("job_link", evt.target.value),
           })}
           type="text"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full text-sm"
         />
       </td>
       <td>
@@ -57,7 +57,7 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
               onFieldChange("application_date", evt.target.value),
           })}
           type="date"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full text-sm"
         />
       </td>
       <td>
@@ -66,12 +66,12 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
           {...register("contact", {
             onChange: (evt) => onFieldChange("contact", evt.target.value),
           })}
-          className="input input-bordered w-full"
+          className="input input-bordered w-full text-sm"
         />
       </td>
       <td>
         <select
-          className="select select-bordered w-full max-w-xs"
+          className="select select-bordered w-full max-w-xs text-sm"
           {...register("status", {
             onChange: (evt) => onFieldChange("status", evt.target.value),
           })}
@@ -91,7 +91,7 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
             onChange: (evt) =>
               onFieldChange("interview_date", evt.target.value),
           })}
-          className="input input-bordered w-full"
+          className="input input-bordered w-full text-sm"
         />
       </td>
       <td>
@@ -100,7 +100,7 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
           {...register("resume_link", {
             onChange: (evt) => onFieldChange("resume_link", evt.target.value),
           })}
-          className="input input-bordered w-full"
+          className="input input-bordered w-full text-sm"
         />
       </td>
       <td>
@@ -110,7 +110,7 @@ export const ReactHookFormAdd = ({ onFieldChange }: Props) => {
             onChange: (evt) =>
               onFieldChange("cover_letter_link", evt.target.value),
           })}
-          className="input input-bordered w-full"
+          className="input input-bordered w-full text-sm"
         />
       </td>
     </>

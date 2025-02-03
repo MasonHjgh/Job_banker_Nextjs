@@ -61,7 +61,7 @@ const ScrapyControllers = ({ userData }: Props) => {
     setIsModalOpen(false)
   }
   return (
-    <div className="flex">
+    <div className="flex justify-center self-center">
       <button className="btn join-item" onClick={startScrap}>
         Scrap
       </button>
@@ -72,16 +72,14 @@ const ScrapyControllers = ({ userData }: Props) => {
           </option>
         ))}
       </select>
-      <div className="flex flex-col">
-        <label htmlFor="scrap_url" className="mb-1 text-sm">
-          Scrap Url
-        </label>
+      <div className="flex flex-col justify-center">
         <input
           type="text"
-          className="input input-bordered"
+          className="input input-bordered text-sm h-10"
           value={scrapUrl}
           name="scrap_url"
           onChange={handleUrlChange}
+          placeholder="Enter Job URL"
         />
         {urlError && <p className="text-red-500 text-sm">{urlError}</p>}
       </div>

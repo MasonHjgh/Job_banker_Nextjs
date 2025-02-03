@@ -54,4 +54,10 @@
   .job-table-tbody-tr:last-child {
     border-bottom: none;
   }
-  
+  .input {
+    @apply h-8;
+  }
+  .select {
+    @apply h-8;
+    @apply min-h-8;
+  }
