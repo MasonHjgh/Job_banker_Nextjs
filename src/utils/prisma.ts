@@ -13,7 +13,7 @@ const pool = new Pool({ connectionString })
 const adapter = new PrismaPg(pool)
 
 // Use a global object to prevent creating multiple PrismaClient instances during hot reloads in development
-const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient }
+const globalForPrisma = globalThis  as { prisma?: PrismaClient }
 
 export const prisma =
   globalForPrisma.prisma ||

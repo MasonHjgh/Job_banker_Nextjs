@@ -10,7 +10,7 @@ type Props = {
 
 const ScrapyControllers = ({ userData }: Props) => {
   const [scrapUrl, set_scrapUrl] = useState("")
-    const {setIsLoading} = useLoadingStore()
+  const { setIsLoading } = useLoadingStore()
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value) setUrlError("")
     set_scrapUrl(event.target.value)
