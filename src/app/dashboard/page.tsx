@@ -8,25 +8,22 @@ import { useEffect } from "react"
 function Dashboard() {
   const { data: session, status } = useSession()
 
-  const {setIsLoading} = useLoadingStore()
-  useEffect(() => {
-    if (status === "loading") {
-      setIsLoading(true)
-    } else {
-      setIsLoading(false)
-    }
-  }, [status, setIsLoading]) 
-  // TODO: Add loading spinner
-  if (status === "loading") {
-    return null // Prevent redirecting prematurely
-  }
+  const { setIsLoading } = useLoadingStore()
+  // useEffect(() => {
+  //   if (status === "loading") {
+  //     setIsLoading(true)
+  //   } else {
+  //     setTimeout(() => {
+  //       setIsLoading(false)
+  //     }, 2000)
+  //   }
+  // }, [status, setIsLoading])
 
-  if (!session) {
-    redirect("/login")
-    return null
-  }
- 
-  return <JobTable userData={session} />
+  
+
+  return session === undefined || session === null ? null : (
+    <JobTable userData={session} />
+  )
 }
 
 export default Dashboard

@@ -4,10 +4,6 @@ import type { NextAuthConfig } from "next-auth"
 // Notice this is only an object, not a full Auth.js instance
 export default {
   providers: [Google],
-  pages: {
-    signIn: "/login",
-    signOut: "/login"  // 👈 Redirects users to a custom login page
-  },
   callbacks: {
     async jwt({ token, user }) {
      

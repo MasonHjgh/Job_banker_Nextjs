@@ -1,16 +1,16 @@
 import { create } from "zustand"
 
-export interface LoadingStore {
+export type LoadingStoreType= {
   isLoading: boolean
   setIsLoading: (enabled: boolean) => void
 }
 
-export const useLoadingStore = create<LoadingStore>((set) => ({
+export const useLoadingStore = create<LoadingStoreType>((set) => ({
   isLoading: false,
   setIsLoading: (enabled: boolean) => set({ isLoading: enabled }),
 }))
 
-export interface JobStore {
+export type JobStore= {
   refreshJobs: boolean
   setrefreshJobs: () => void
 }

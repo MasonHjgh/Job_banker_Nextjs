@@ -1,21 +1,9 @@
+"use client"
 import React from "react"
-import { signOut,auth } from "utils/auth"
+import { signOut, useSession } from "next-auth/react"
 
-export function SignOut() {
-  return (
-    <form
-      action={async () => {
-        "use server"
-        await signOut()
-      }}
-    >
-      <button type="submit">Sign Out</button>
-    </form>
-  )
-}
-
-export default async function UserMenu() {
-    const session = await auth()
+export default function UserMenu() {
+      const { data: session } = useSession()
     
     if (!session) {
       return null
@@ -35,7 +23,7 @@ export default async function UserMenu() {
             <a>Profile</a>
           </li>
           <li>
-            <SignOut />
+          <button onClick={() => signOut()}>Sign Out</button>
           </li>
         </ul>
       </div>

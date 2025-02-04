@@ -3,7 +3,7 @@ import NavBarItem from "features/navbar/NavbarItem"
 import UserMenu from "features/user-menu/UserMenu"
 
 const navItemList = [
-  { address: "/", text: "home" },
+  { address: "/login", text: "home" },
   { address: "/", text: "about" },
   { address: "/", text: "contact us" },
 ]
