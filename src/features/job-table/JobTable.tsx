@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import Link from "next/link"
 import { request } from "utils/api"
 import { ReactHookFormEdit } from "features/react-hook-forms/edit/ReactHookFormEdit"
@@ -21,7 +21,7 @@ type Props = {
 const JobTable = ({ userData }: Props) => {
   const [data, setData] = useState<Job[]>([])
 
-  //selected item handler
+
   const [selectedItem, setSelectedItem] = useState<Job | null>(null)
   const [isAddingItem, setIsAddingItem] = useState(false)
   const [newItem, setNewItem] = useState<Job | null>(null)
@@ -43,8 +43,6 @@ const JobTable = ({ userData }: Props) => {
       setIsLoading(false)
     }
   }
-
-
   const editJob = async () => {
     setIsLoading(true)
     try {
@@ -62,7 +60,6 @@ const JobTable = ({ userData }: Props) => {
       setIsLoading(false)
     }
   }
-
   const addJob = async () => {
     setIsLoading(true)
     try {
@@ -90,7 +87,6 @@ const JobTable = ({ userData }: Props) => {
       setIsLoading(false)
     }
   }
-
   const deleteJob = async () => {
     setIsLoading(true)
     try {
@@ -187,7 +183,7 @@ const JobTable = ({ userData }: Props) => {
         <div>
           <button className="btn join-item" disabled>Search</button>
         </div>
-        <ScrapyControllers userData={userData.user} />
+        <ScrapyControllers />
       </div>
 
       {/* {isAddingItem ? (
@@ -255,7 +251,7 @@ const JobTable = ({ userData }: Props) => {
                     <td>{row.contact}</td>
                     <td>
                       {StatusDropdownData.find(
-                        (item) => item.id === Number(row.status)
+                        (item) => item.id === row.status
                       )?.name || "Unknown Status"}
                     </td>
                     <td> {parseDateTime(row.interview_date)}</td>

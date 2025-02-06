@@ -4,11 +4,9 @@ import ScrapyJobForm from "features/react-hook-forms/scrapy-job-form/ScrapyJobFo
 import React, { useState } from "react"
 import { request } from "utils/api"
 import { useLoadingStore } from "providers/Store"
-type Props = {
-  userData: any
-}
+type Props = {}
 
-const ScrapyControllers = ({ userData }: Props) => {
+const ScrapyControllers = ({}: Props) => {
   const [scrapUrl, set_scrapUrl] = useState("")
   const { setIsLoading } = useLoadingStore()
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,17 +59,17 @@ const ScrapyControllers = ({ userData }: Props) => {
     setIsModalOpen(false)
   }
   return (
-    <div className="flex justify-center self-center">
-      <button className="btn join-item" onClick={startScrap}>
-        Scrap
+    <div className="flex justify-center self-center gap-2">
+      <button className="btn btn-accent join-item" onClick={startScrap}>
+        Import
       </button>
-      <select className="select select-bordered w-full max-w-xs" disabled>
+      {/* <select className="select select-bordered w-full max-w-xs" disabled>
         {sourceDropDownData.map((op, index) => (
           <option key={index} value={op.id}>
             {op.name}
           </option>
         ))}
-      </select>
+      </select> */}
       <div className="flex flex-col justify-center">
         <input
           type="text"
@@ -84,11 +82,7 @@ const ScrapyControllers = ({ userData }: Props) => {
         {urlError && <p className="text-red-500 text-sm">{urlError}</p>}
       </div>
       <Modal isOpen={isModalOpen} closeModal={handleModalClose}>
-        <ScrapyJobForm
-          jobData={scrapData}
-          userData={userData}
-          closeModal={handleModalClose}
-        />
+        <ScrapyJobForm jobData={scrapData} closeModal={handleModalClose} />
       </Modal>
     </div>
   )

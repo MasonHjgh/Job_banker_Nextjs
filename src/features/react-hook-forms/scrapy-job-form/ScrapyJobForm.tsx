@@ -21,10 +21,11 @@ type JobFormInputs = {
 
 type Props = {
   jobData: Job | null
-  userData: any
+
   closeModal: () => void
 }
-const JobForm = ({ jobData, userData, closeModal }: Props) => {
+const JobForm = ({ jobData, closeModal }: Props) => {
+
   const {
     register,
     handleSubmit,
@@ -37,8 +38,6 @@ const {setrefreshJobs} = useJobStore()
     try {
       setIsLoading(true)
       if (!data) return
-
-      data.applicant_id = userData.id
 
       await request<Job>({
         url: "/jobs",

@@ -1,22 +1,22 @@
 export const StatusDropdownData = [
     {
-        id: 1,
+        id: "1",
         name: "Applied",
     },
     {
-        id: 2,
+        id: "2",
         name: "Interviewing",
     },
     {
-        id: 3,
+        id: "3",
         name: "Hired",
     },
     {
-        id: 4,
+        id: "4",
         name: "Rejected",
     },
     {
-        id: 5,
+        id: "5",
         name: "Saved",
     },
 ]

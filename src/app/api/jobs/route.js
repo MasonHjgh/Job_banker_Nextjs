@@ -6,11 +6,12 @@ export async function GET(req) {
   try {
     const session = await auth()
 
-    if (!session){
-      return NextResponse.json({message: "Unauthorized", status: 401})
+    if (!session) {
+      return NextResponse.json({ message: "Unauthorized", status: 401 })
     }
     const results = await prisma.job.findMany({
       where: { applicant_id: session.user.id },
+      orderBy: { createdAt: "desc" },
     })
     return NextResponse.json(results)
   } catch (error) {
@@ -19,11 +20,22 @@ export async function GET(req) {
   }
 }
 
-
 // Edit Job
 export async function PUT(request) {
   try {
     const job = await request.json()
+
+    if (job.application_date) {
+      job.application_date = new Date(job.application_date)
+    } else {
+      job.application_date = null
+    }
+    if (job.interview_date) {
+      job.interview_date = new Date(job.interview_date)
+    } else {
+      job.interview_date = null
+    }
+
     const updatedJob = await prisma.job.update({
       where: {
         id: job.id,
@@ -53,9 +65,10 @@ export async function PUT(request) {
 // Add Job
 export async function POST(request) {
   try {
+    const session = await auth()
     // Parse the incoming request body
     const jobData = await request.json()
-
+    jobData.applicant_id = session.user.id
     if (jobData.application_date) {
       jobData.application_date = new Date(jobData.application_date)
     } else {
