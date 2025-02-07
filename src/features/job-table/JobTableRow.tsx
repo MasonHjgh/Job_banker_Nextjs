@@ -1,15 +1,15 @@
 import React, { useState } from "react"
 import { type Job } from "@prisma/client"
-import JobTable2RowEdit from "./JobTable2RowEdit"
-import JobTable2RowNotEdit from "./JobTable2RowNotEdit"
+import JobTableRowEdit from "./JobTableRowEdit"
+import JobTableRowNotEdit from "./JobTableRowNotEdit"
 import { AiFillEdit } from "react-icons/ai";
-import JobTable2RowDelete from "./JobTable2RowDelete"
+import JobTableRowDelete from "./JobTableRowDelete"
 
 type Props = {
   row: Job
 }
 
-export default function JobTable2Row({ row }: Props) {
+export default function JobTableRow({ row }: Props) {
   const [isEditing, setisEditing] = useState<number | null>(null)
 
   const handleSetEditing = () => {
@@ -28,14 +28,14 @@ export default function JobTable2Row({ row }: Props) {
           >
             <AiFillEdit/>
           </button>
-         <JobTable2RowDelete row={row}/>
+         <JobTableRowDelete row={row}/>
         </div>
       ) : null}
 
       {isEditing === row.id ? (
-        <JobTable2RowEdit row={row} cancelEdit={handleSetNotEditing}/>
+        <JobTableRowEdit row={row} cancelEdit={handleSetNotEditing}/>
       ) : (
-        <JobTable2RowNotEdit row={row} />
+        <JobTableRowNotEdit row={row} />
       )}
     </div>
   )

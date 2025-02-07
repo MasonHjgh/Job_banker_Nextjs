@@ -1,9 +1,6 @@
-import { NextResponse, NextRequest } from "next/server.js"
-import { PrismaClient } from "@prisma/client"
-import { Job } from "@prisma/client"
+import { NextResponse } from "next/server.js"
 import * as cheerio from "cheerio"
 import axios from "axios"
-const prisma = new PrismaClient()
 import { URL } from "url"
 
 const urlLists = [

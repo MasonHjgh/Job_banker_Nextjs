@@ -9,7 +9,7 @@ type Props = {
   row: Job
 }
 
-const JobTable2RowDelete = ({ row }: Props) => {
+const JobTableRowDelete = ({ row }: Props) => {
   const { setIsLoading } = useLoadingStore()
   const { setrefreshJobs } = useJobStore()
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -65,4 +65,4 @@ const JobTable2RowDelete = ({ row }: Props) => {
   )
 }
 
-export default JobTable2RowDelete
+export default JobTableRowDelete

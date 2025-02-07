@@ -1,13 +1,14 @@
 export const JobTableTitles = [
-    "Select",
-    "Position",
+    "Actions",
     "Company",
+    "Position",
     "Salary",
     "Job Posting",
-    "Application Date",
     "Contact",
     "Status",
+    "Application Date",
     "Interview Date",
     "Resume Link",
     "Cover Letter",
   ]
+

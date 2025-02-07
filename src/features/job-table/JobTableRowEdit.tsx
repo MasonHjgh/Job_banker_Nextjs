@@ -10,7 +10,7 @@ type Props = {
   cancelEdit: () => void
 }
 
-const JobTable2RowEdit = ({ row, cancelEdit }: Props) => {
+const JobTableRowEdit = ({ row, cancelEdit }: Props) => {
   {
     const {
       register,
@@ -108,4 +108,4 @@ const JobTable2RowEdit = ({ row, cancelEdit }: Props) => {
   }
 }
 
-export default JobTable2RowEdit
+export default JobTableRowEdit

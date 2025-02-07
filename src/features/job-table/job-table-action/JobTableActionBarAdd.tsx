@@ -5,7 +5,7 @@ import React, { useState } from "react"
 import ScrapyJobForm  from "features/react-hook-forms/scrapy-job-form/ScrapyJobForm"
 type Props = {}
 
-const JobTable2ActionBarAdd = (props: Props) => {
+const JobTableActionBarAdd = (props: Props) => {
 const [isModalOpen, setIsModalOpen] = useState(false)
   const handleModalOpen = () => {
     setIsModalOpen(true)
@@ -22,4 +22,4 @@ const [isModalOpen, setIsModalOpen] = useState(false)
   )
 }
 
-export default JobTable2ActionBarAdd
+export default JobTableActionBarAdd

@@ -1,15 +1,15 @@
 "use client"
 import React from "react"
-import JobTable2ActionBarAdd from "./JobTable2ActionBarAdd"
+import JobTableActionBarAdd from "./JobTableActionBarAdd"
 import ScrapyControllers from "features/scrapy/ScrapyControllers"
 
 type Props = {}
 
-const JobTable2ActionBar = (props: Props) => {
+const JobTableActionBar = (props: Props) => {
   return (
     <div className="flex gap-2 p-3">
       <div>
-        <JobTable2ActionBarAdd />
+        <JobTableActionBarAdd />
       </div>
       <div>
         <ScrapyControllers />
@@ -18,4 +18,4 @@ const JobTable2ActionBar = (props: Props) => {
   )
 }
 
-export default JobTable2ActionBar
+export default JobTableActionBar
