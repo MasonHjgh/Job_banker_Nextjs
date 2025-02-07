@@ -22,11 +22,13 @@ const ScrapyControllers = ({}: Props) => {
         setUrlError("Please enter a url")
         return
       }
+
       const result = await request<any>({
         url: "/extraction",
         method: "POST",
         data: scrapUrl,
       })
+      console.log(result)
       setScrapData(result.data)
       handleModalOpen()
     } catch (error) {

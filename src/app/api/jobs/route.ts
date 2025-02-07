@@ -1,8 +1,9 @@
 import { NextResponse, NextRequest } from "next/server.js"
 import { prisma } from "utils/prisma"
 import { auth } from "utils/auth"
+
 // GET all Jobs
-export async function GET(req) {
+export async function GET() {
   try {
     const session = await auth()
 
@@ -10,7 +11,7 @@ export async function GET(req) {
       return NextResponse.json({ message: "Unauthorized", status: 401 })
     }
     const results = await prisma.job.findMany({
-      where: { applicant_id: session.user.id },
+      where: { applicant_id: session.user?.id },
       orderBy: { createdAt: "desc" },
     })
     return NextResponse.json(results)
@@ -21,7 +22,7 @@ export async function GET(req) {
 }
 
 // Edit Job
-export async function PUT(request) {
+export async function PUT(request:NextRequest) {
   try {
     const job = await request.json()
 
@@ -63,12 +64,15 @@ export async function PUT(request) {
 }
 
 // Add Job
-export async function POST(request) {
+export async function POST(request:NextRequest) {
   try {
     const session = await auth()
+    if (!session) {
+      return NextResponse.json({ message: "Unauthorized", status: 401 })
+    }
     // Parse the incoming request body
     const jobData = await request.json()
-    jobData.applicant_id = session.user.id
+    jobData.applicant_id = session.user?.id
     if (jobData.application_date) {
       jobData.application_date = new Date(jobData.application_date)
     } else {
@@ -108,13 +112,12 @@ export async function POST(request) {
     return NextResponse.json({
       message: "Failed to add job",
       status: 500,
-      error: error.message,
     })
   }
 }
 
 // Delete Job
-export async function DELETE(request) {
+export async function DELETE(request:NextRequest) {
   try {
     const job = await request.json()
     const deleteJob = await prisma.job.delete({
