@@ -1,4 +1,8 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This project is using PostgreSQL, DaisyUI, Tailwind css and React.
+Its an application for keeping records of the job application sent. The user is resposible for entering the required data or use auto importer for Linkedin.
+I plan on adding Indeed and Glassdoor to the auto importer so that the users can extract the main data automaticaly with just the URL of the job application.
+
 
 ## Getting Started
 
